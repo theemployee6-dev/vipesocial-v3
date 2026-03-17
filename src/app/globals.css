@@ -1,26 +1,96 @@
 @import "tailwindcss";
 
+/* ============================================
+   DESIGN SYSTEM — vipeSocial
+   Todas as variáveis de cor e tipografia
+   da plataforma ficam aqui centralizadas.
+   Mudar aqui reflete em toda a aplicação.
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Cores base */
+  --vs-bg-root: #080810;
+  --vs-bg-card: #0f0f1a;
+  --vs-bg-input: rgba(255, 255, 255, 0.03);
+  --vs-bg-button-secondary: rgba(255, 255, 255, 0.03);
+
+  /* Cor primária — roxo vipeSocial */
+  --vs-primary: #7c5cfc;
+  --vs-primary-dark: #5a3de0;
+  --vs-primary-darker: #5030d0;
+  --vs-primary-muted: rgba(124, 92, 252, 0.08);
+  --vs-primary-border: rgba(124, 92, 252, 0.15);
+  --vs-primary-glow: rgba(124, 92, 252, 0.18);
+
+  /* Cor âmbar — acento quente */
+  --vs-amber: #c88c28;
+  --vs-amber-glow: rgba(200, 140, 40, 0.12);
+
+  /* Cor azul — acento frio */
+  --vs-blue-glow: rgba(80, 120, 255, 0.1);
+
+  /* Bordas */
+  --vs-border-subtle: rgba(255, 255, 255, 0.06);
+  --vs-border-input: rgba(255, 255, 255, 0.07);
+  --vs-border-input-focus: rgba(124, 92, 252, 0.4);
+
+  /* Texto */
+  --vs-text-primary: #e8e8f8;
+  --vs-text-secondary: #3a3a55;
+  --vs-text-muted: #5a5a78;
+  --vs-text-placeholder: #252535;
+  --vs-text-label: #5a5a78;
+  --vs-text-dimmed: #3a3a52;
+
+  /* Fontes */
+  --font-display: var(--font-syne);
+  --font-body: var(--font-dm-sans);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  /* Garante que o dark mode é sempre aplicado
+     porque a vipeSocial é dark-only por design */
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--vs-bg-root);
+  color: var(--vs-text-primary);
+  font-family: var(--font-body), "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utilitários globais de fonte */
+.font-display {
+  font-family: var(--font-display), "Syne", sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-body), "DM Sans", sans-serif;
+}
+
+/* Remove outline padrão feio do browser
+   e substitui por nosso estilo de focus */
+input:focus,
+button:focus {
+  outline: none;
+}
+
+/* Scrollbar customizada para combinar com o dark mode */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vs-bg-root);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e1e2e;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2e2e4e;
 }
