@@ -1,6 +1,6 @@
 import React from "react";
 
-const GlowLineComponent = () => {
+const TopGlowLineComponent = () => {
   return (
     <>
       {/* Top glow line */}
@@ -15,4 +15,4 @@ const GlowLineComponent = () => {
   );
 };
 
-export default GlowLineComponent;
+export default TopGlowLineComponent;

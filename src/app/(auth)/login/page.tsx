@@ -1,20 +1,20 @@
 "use client";
 
-import GlowsEffectComponent from "./components/Glows/page";
-import NoiseTextureComponent from "./components/NoiseTexture/page";
-import BackLinkComponent from "./components/BackLink/page";
-import GlowLineComponent from "./components/GlowLine/page";
-import LogoComponent from "./components/Logo/page";
-import PillComponent from "./components/Pill/page";
-import HeaderComponent from "./components/Header/page";
-import DividerComponent from "./components/Divider/page";
-import GoogleButtonComponent from "./components/GoogleButton/page";
-import FooterComponent from "./components/Footer/page";
-import ProofStatsComponent from "./components/ProofStats/page";
-import TermFooterComponent from "./components/TermFooter/page";
+import GlowsEffectComponent from "../shared/components/Glows/page";
+import NoiseTextureComponent from "../shared/components/NoiseTexture/page";
+import BackLinkComponent from "../shared/components/BackLink/page";
+import TopGlowLineComponent from "../shared/components/TopGlowLine/page";
+import LogoComponent from "../shared/components/Logo/page";
+import PillComponent from "../shared/components/Pill/page";
+import HeaderComponent from "../shared/components/Header/page";
+import DividerComponent from "../shared/components/Divider/page";
+import GoogleButtonComponent from "../shared/components/GoogleButton/page";
+import FooterComponent from "../shared/components/Footer/page";
+import ProofStatsComponent from "../shared/components/ProofStats/page";
+import TermFooterComponent from "../shared/components/TermFooter/page";
 import RememberAndForgotComponent from "./components/RememberForgot/page";
-import ButtonWrapper from "./components/ButtonWrapper/page";
-import CardWrapper from "./components/CardWrapper/page";
+import MainButton from "../shared/components/MainButton/page";
+import CardWrapper from "../shared/components/CardWrapper/page";
 
 export default function LoginPage() {
   return (
@@ -31,7 +31,7 @@ export default function LoginPage() {
       {/* Card */}
       <CardWrapper>
         {/* Top glow line */}
-        <GlowLineComponent />
+        <TopGlowLineComponent />
 
         {/* Logo */}
         <LogoComponent />
@@ -40,7 +40,10 @@ export default function LoginPage() {
         <PillComponent />
 
         {/* Heading */}
-        <HeaderComponent />
+        <HeaderComponent
+          title="Acesse sua conta"
+          subTitle="Bem-vindo de volta. Vamos viralizar."
+        />
 
         {/* Form */}
         <form className="flex flex-col gap-4">
@@ -72,17 +75,20 @@ export default function LoginPage() {
           <RememberAndForgotComponent />
 
           {/* Button wrapper */}
-          <ButtonWrapper />
+          <MainButton title="Entrar" />
 
           {/* Divider */}
           <DividerComponent />
 
           {/* Google button */}
-          <GoogleButtonComponent />
+          <GoogleButtonComponent title="Entrar" />
         </form>
 
         {/* Footer */}
-        <FooterComponent />
+        <FooterComponent
+          title="Não tem conta?"
+          titleLink="Criar conta grátis"
+        />
       </CardWrapper>
 
       {/* Proof stats */}

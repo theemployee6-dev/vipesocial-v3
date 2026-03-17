@@ -1,9 +1,9 @@
 import React from "react";
 
-const ButtonWrapper = () => {
+const MainButton = ({ title }: { title: string }) => {
   return (
     <>
-      {/* Button wrapper */}
+      {/* Main Button */}
       <div className="relative mb-5">
         <button
           type="submit"
@@ -16,11 +16,11 @@ const ButtonWrapper = () => {
                 "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
             }}
           />
-          Entrar
+          {title}
         </button>
       </div>
     </>
   );
 };
 
-export default ButtonWrapper;
+export default MainButton;
