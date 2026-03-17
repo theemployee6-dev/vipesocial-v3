@@ -1,7 +1,11 @@
 import React from "react";
 import { GoogleIcon } from "./components/GoogleIcon";
 
-const GoogleButtonComponent = ({ title }: { title: string }) => {
+const GoogleButtonComponent = ({
+  title = "Entrar com o Google",
+}: {
+  title?: string;
+}) => {
   return (
     <>
       {/* Google button */}

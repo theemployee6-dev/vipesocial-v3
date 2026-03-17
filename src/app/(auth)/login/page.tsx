@@ -72,7 +72,7 @@ export default function LoginPage() {
           <DividerComponent />
 
           {/* Google button */}
-          <GoogleButtonComponent title="Entrar" />
+          <GoogleButtonComponent title="Entrar com o Google" />
         </form>
 
         {/* Footer */}
