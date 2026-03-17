@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import DividerComponent from "../shared/components/Divider/page";
 
-import { GoogleIcon } from "../shared/components/GoogleButton/components/GoogleIcon";
 import LogoComponent from "../shared/components/Logo/page";
 import PillComponent from "../shared/components/Pill/page";
 import HeaderComponent from "../shared/components/Header/page";
@@ -17,6 +15,7 @@ import ProofStatsComponent from "../shared/components/ProofStats/page";
 import TermFooterComponent from "../shared/components/TermFooter/page";
 import FooterComponent from "../shared/components/Footer/page";
 import CardWrapper from "../shared/components/CardWrapper/page";
+import FieldInput from "../shared/components/FieldInput/FieldInput";
 
 export default function CadastroPage() {
   return (
@@ -50,56 +49,36 @@ export default function CadastroPage() {
         {/* Form */}
         <form className="flex flex-col gap-4">
           {/* Nome completo */}
-          <div>
-            <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 tracking-[0.2px]">
-              Nome completo
-            </label>
-            <input
+          <section>
+            <FieldInput
+              label="Nome Completo"
               type="text"
-              placeholder="Seu nome"
-              className="w-full bg-white/3 border border-white/7 rounded-xl px-4 py-3.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors duration-200 placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
+              placeholder="Digite seu nome"
             />
-          </div>
+          </section>
 
           {/* Email */}
-          <div>
-            <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 tracking-[0.2px]">
-              Email
-            </label>
-            <input
+          <section>
+            <FieldInput
+              label="Email"
               type="email"
               placeholder="seu@email.com"
-              className="w-full bg-white/3 border border-white/7 rounded-xl px-4 py-3.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors duration-200 placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
             />
-          </div>
+          </section>
 
           {/* Senha */}
-          <div>
-            <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 tracking-[0.2px]">
-              Senha
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full bg-white/3 border border-white/7 rounded-xl px-4 py-3.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors duration-200 placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
-            />
-            {/* Dica de senha forte */}
-            <p className="text-[10px] text-[#2a2a3a] font-dm-sans mt-1.5">
-              Mínimo 8 caracteres com letras e números
-            </p>
-          </div>
+          <section>
+            <FieldInput label="Senha" type="password" placeholder="••••••••" />
+          </section>
 
           {/* Confirmar senha */}
-          <div className="mb-2">
-            <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 tracking-[0.2px]">
-              Confirmar senha
-            </label>
-            <input
+          <section className="mb-2">
+            <FieldInput
+              label="Confirmar senha"
               type="password"
               placeholder="••••••••"
-              className="w-full bg-white/3 border border-white/7 rounded-xl px-4 py-3.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors duration-200 placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
             />
-          </div>
+          </section>
 
           {/* Botão principal */}
           <MainButton title="Criar minha conta →" />
@@ -112,7 +91,11 @@ export default function CadastroPage() {
         </form>
 
         {/* Footer */}
-        <FooterComponent title="Já tem conta?" titleLink=" Entrar" />
+        <FooterComponent
+          href="/login"
+          title="Já tem conta?"
+          titleLink=" Entrar"
+        />
       </CardWrapper>
 
       {/* Proof stats */}

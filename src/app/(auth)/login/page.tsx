@@ -15,6 +15,7 @@ import TermFooterComponent from "../shared/components/TermFooter/page";
 import RememberAndForgotComponent from "./components/RememberForgot/page";
 import MainButton from "../shared/components/MainButton/page";
 import CardWrapper from "../shared/components/CardWrapper/page";
+import FieldInput from "../shared/components/FieldInput/FieldInput";
 
 export default function LoginPage() {
   return (
@@ -48,28 +49,18 @@ export default function LoginPage() {
         {/* Form */}
         <form className="flex flex-col gap-4">
           {/* Email */}
-          <div className="mb-3.5">
-            <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 tracking-[0.2px]">
-              Email
-            </label>
-            <input
+          <section className="mb-3.5">
+            <FieldInput
+              label="Email"
               type="email"
               placeholder="seu@email.com"
-              className="w-full bg-white/3 border border-white/7 rounded-xl px-4 py-3.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors duration-200 placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
             />
-          </div>
+          </section>
 
           {/* Senha */}
-          <div className="mb-3.5">
-            <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 tracking-[0.2px]">
-              Senha
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full bg-white/3 border border-white/7 rounded-xl px-4 py-3.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors duration-200 placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
-            />
-          </div>
+          <section className="mb-3.5">
+            <FieldInput label="Senha" type="password" placeholder="••••••••" />
+          </section>
 
           {/* Row: remember + forgot */}
           <RememberAndForgotComponent />
@@ -86,6 +77,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <FooterComponent
+          href="/cadastro"
           title="Não tem conta?"
           titleLink="Criar conta grátis"
         />
