@@ -1,12 +1,15 @@
 import Link from "next/link";
-import React from "react";
 
-const BackLinkComponent = () => {
+interface BackLinkProps {
+  href: string; // ou UrlObject, se precisar de objetos complexos
+}
+
+const BackLinkComponent = ({ href }: BackLinkProps) => {
   return (
     <>
       {/* Back link */}
       <Link
-        href="/"
+        href={href}
         className="absolute top-10 left-4 sm:top-12 sm:left-8 flex items-center gap-1.5 text-xs sm:text-sm text-[#3a3a50] hover:text-[#6a6a90] transition-colors font-dm-sans no-underline"
       >
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">

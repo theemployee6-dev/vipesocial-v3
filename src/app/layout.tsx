@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 // Fonte display — usada em títulos, logo e botões principais.
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${syne.variable} ${dmSans.variable} antialiased`}>
         {children}
+        <Toaster position="top-center" richColors theme="dark" />
       </body>
     </html>
   );

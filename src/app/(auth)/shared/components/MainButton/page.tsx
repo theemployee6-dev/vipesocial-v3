@@ -1,6 +1,10 @@
-import React from "react";
+interface MainButtonProps {
+  title: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}
 
-const MainButton = ({ title }: { title: string }) => {
+const MainButton = ({ title, onClick, disabled }: MainButtonProps) => {
   return (
     <>
       {/* Main Button */}
@@ -8,6 +12,8 @@ const MainButton = ({ title }: { title: string }) => {
         <button
           type="submit"
           className="relative w-full rounded-xl py-3.5 text-sm font-bold text-white overflow-hidden bg-linear-to-br from-[#7c5cfc] via-[#6040e0] to-[#5030d0] tracking-[0.3px]"
+          onClick={onClick}
+          disabled={disabled}
         >
           <span
             className="absolute bottom-0 left-1/4 right-1/4 h-px pointer-events-none"

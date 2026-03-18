@@ -12,15 +12,26 @@ export async function proxy(request: NextRequest) {
 
   // Rotas que só fazem sentido para quem NÃO está logado.
   // Se um usuário logado tentar acessar, mandamos para o dashboard.
-  const authRoutes = ["/login", "/cadastro", "/confirmar-email"];
+  const authRoutes = [
+    "/login",
+    "/cadastro",
+    "/confirmar-email",
+    "/recuperar-senha",
+  ];
+
+  // Adiciona as rotas de auth callback como públicas
+  const authCallbackRoutes = ["/auth/callback"];
 
   // Se o usuário não está logado e tenta acessar rota protegida,
   // mandamos para o login guardando a URL que ele queria acessar
   // para redirecionar de volta depois que fizer login.
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
   const isPublicRoute = publicRoutes.some((route) => pathname === route);
+  const isCallbackRoute = authCallbackRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
 
-  if (!user && !isAuthRoute && !isPublicRoute) {
+  if (!user && !isAuthRoute && !isPublicRoute && !isCallbackRoute) {
     const redirectUrl = new URL("/login", request.url);
     redirectUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(redirectUrl);
