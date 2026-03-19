@@ -22,6 +22,9 @@ export async function proxy(request: NextRequest) {
   // Adiciona as rotas de auth callback como públicas
   const authCallbackRoutes = ["/auth/callback"];
 
+  // Rota de onboarding — usuário logado mas sem perfil completo
+  const onboardingRoute = "/onboarding";
+
   // Se o usuário não está logado e tenta acessar rota protegida,
   // mandamos para o login guardando a URL que ele queria acessar
   // para redirecionar de volta depois que fizer login.
@@ -31,19 +34,40 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith(route),
   );
 
+  const isOnboardingRoute = pathname.startsWith(onboardingRoute);
+
+  // Usuário não logado tentando acessar rota protegida
   if (!user && !isAuthRoute && !isPublicRoute && !isCallbackRoute) {
     const redirectUrl = new URL("/login", request.url);
     redirectUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Se o usuário está logado e tenta acessar rota de auth,
-  // mandamos para o dashboard dele.
+  // Usuário logado tentando acessar rota de auth
   if (user && isAuthRoute) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Em todos os outros casos deixamos passar com a sessão atualizada.
+  // Usuário logado mas onboarding não completo
+  // tentando acessar qualquer rota que não seja onboarding,
+  // auth, pública ou callback
+  if (
+    user &&
+    !user.user_metadata?.onboarding_completed &&
+    !isOnboardingRoute &&
+    !isAuthRoute &&
+    !isPublicRoute &&
+    !isCallbackRoute
+  ) {
+    return NextResponse.redirect(new URL("/onboarding", request.url));
+  }
+
+  // Usuário logado com onboarding completo tentando acessar onboarding
+  // redireciona para o dashboard
+  if (user && user.user_metadata?.onboarding_completed && isOnboardingRoute) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
   return supabaseResponse;
 }
 
@@ -52,6 +76,6 @@ export async function proxy(request: NextRequest) {
 // requisições desnecessárias e manter o middleware rápido.
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/inngest|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

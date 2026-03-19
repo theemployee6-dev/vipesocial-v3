@@ -5,14 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import GlowsEffectComponent from "../shared/components/Glows/page";
 import BackLinkComponent from "../shared/components/BackLink/page";
-import TopGlowLineComponent from "../shared/components/TopGlowLine/page";
-import LogoComponent from "../shared/components/Logo/page";
-import HeaderComponent from "../shared/components/Header/page";
-import FieldInput from "../shared/components/FieldInput/FieldInput";
-import MainButton from "../shared/components/MainButton/page";
-import CardWrapper from "../shared/components/CardWrapper/page";
+
+import CardWrapper from "@/shared/components/CardWrapper/page";
+import FieldInput from "@/shared/components/FieldInput/FieldInput";
+import GlowsEffectComponent from "@/shared/components/Glows/page";
+import HeaderComponent from "@/shared/components/Header/page";
+import LogoComponent from "@/shared/components/Logo/page";
+import MainButton from "@/shared/components/MainButton/page";
+import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
 
 const schema = z.object({
   email: z
