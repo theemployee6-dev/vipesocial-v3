@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 // Componentes de fundo e estrutura
 import BackLinkComponent from "../shared/components/BackLink/page";
 import CardWrapper from "../shared/components/CardWrapper/page";
@@ -26,18 +25,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CadastroFormData, cadastroSchema } from "@/shared/utils/validations";
 
 import { useAuth } from "@/shared/hooks/useAuth";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function CadastroPage() {
-  // Estado para guardar erros que vêm do servidor
-  // como email já cadastrado ou erro de rede.
-  const [serverError, setServerError] = useState<string | null>(null);
-
   // Inicializa o formulário com o schema do Zod como validador.
   // O TypeScript já sabe exatamente quais campos existem
   // e quais tipos eles têm graças ao CadastroFormData.
+
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CadastroFormData>({
     resolver: zodResolver(cadastroSchema),
@@ -51,27 +51,39 @@ export default function CadastroPage() {
   const { loginComGoogle, cadastrar } = useAuth();
 
   async function onSubmit(data: CadastroFormData) {
-    // Limpa erro anterior antes de tentar de novo
-    setServerError(null);
+    setLoading(true);
+    try {
+      const resultado = await cadastrar({
+        fullName: data.fullName,
+        email: data.email,
+        password: data.password,
+      });
 
-    const resultado = await cadastrar({
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-    });
+      // Se retornou erro, mostra na tela.
+      if (resultado?.error) {
+        toast.error(resultado.error);
+        return;
+      }
 
-    // Se retornou erro, mostra na tela.
-    // Se não retornou, o redirect dentro da
-    // Server Action já redirecionou o usuário.
-    if (resultado?.error) {
-      setServerError(resultado.error);
+      reset();
+      toast.success("Login com Sucesso!");
+    } catch {
+      // Erro inesperado — rede caiu, servidor fora do ar, etc.
+      toast.error("Algo deu errado. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   }
 
   async function handleGoogle() {
-    const resultado = await loginComGoogle();
-    if (resultado?.error) {
-      setServerError(resultado.error);
+    try {
+      const resultado = await loginComGoogle();
+      if (resultado?.error) {
+        toast.error(resultado.error);
+        return;
+      }
+    } catch {
+      toast.error("Algo deu errado. Tente novamente.");
     }
   }
 
@@ -113,6 +125,7 @@ export default function CadastroPage() {
               placeholder="Digite seu nome"
               registration={register("fullName")}
               error={errors.fullName?.message}
+              disabled={loading}
             />
           </section>
 
@@ -124,6 +137,7 @@ export default function CadastroPage() {
               placeholder="seu@email.com"
               registration={register("email")}
               error={errors.email?.message}
+              disabled={loading}
             />
           </section>
 
@@ -135,6 +149,7 @@ export default function CadastroPage() {
               placeholder="••••••••"
               registration={register("password")}
               error={errors.password?.message}
+              disabled={loading}
             />
           </section>
 
@@ -146,11 +161,15 @@ export default function CadastroPage() {
               placeholder="••••••••"
               registration={register("confirmPassword")}
               error={errors.confirmPassword?.message}
+              disabled={loading}
             />
           </section>
 
           {/* Botão principal */}
-          <MainButton title="Criar minha conta →" />
+          <MainButton
+            title={loading ? "Carregando..." : "Criar minha conta →"}
+            disabled={loading}
+          />
 
           {/* Divider */}
           <DividerComponent />
@@ -159,7 +178,7 @@ export default function CadastroPage() {
           <GoogleButtonComponent
             title="Entrar com o Google"
             onClick={handleGoogle}
-            severError={serverError}
+            disabled={loading}
           />
         </form>
 

@@ -27,6 +27,7 @@ export default function RecuperarSenhaPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -47,7 +48,7 @@ export default function RecuperarSenhaPage() {
         toast.error("Erro ao enviar email. Tente novamente.");
         return;
       }
-
+      reset();
       toast.success("Email enviado! Verifique sua caixa de entrada.");
     } catch {
       toast.error("Algo deu errado. Tente novamente.");

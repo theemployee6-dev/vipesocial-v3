@@ -34,6 +34,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -54,6 +55,7 @@ export default function LoginPage() {
         return;
       }
 
+      reset();
       toast.success("Login com Sucesso!");
     } catch {
       // Erro inesperado — rede caiu, servidor fora do ar, etc.
@@ -133,7 +135,10 @@ export default function LoginPage() {
           <RememberAndForgotComponent />
 
           {/* Button wrapper */}
-          <MainButton title="Entrar" disabled={loading} />
+          <MainButton
+            title={loading ? "Carregando..." : "Entrar"}
+            disabled={loading}
+          />
 
           {/* Divider */}
           <DividerComponent />

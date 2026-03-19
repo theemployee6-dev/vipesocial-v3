@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 interface MainButtonProps {
   title: string;
   onClick?: () => void;
@@ -11,7 +13,12 @@ const MainButton = ({ title, onClick, disabled }: MainButtonProps) => {
       <div className="relative mb-5">
         <button
           type="submit"
-          className="relative w-full rounded-xl py-3.5 text-sm font-bold text-white overflow-hidden bg-linear-to-br from-[#7c5cfc] via-[#6040e0] to-[#5030d0] tracking-[0.3px]"
+          className={clsx(
+            "relative w-full rounded-xl py-3.5 text-sm font-bold text-white overflow-hidden tracking-[0.3px]",
+            disabled
+              ? "bg-gray-500 transition-all duration-500"
+              : "bg-linear-to-br from-[#7c5cfc] via-[#6040e0] to-[#5030d0]",
+          )}
           onClick={onClick}
           disabled={disabled}
         >
