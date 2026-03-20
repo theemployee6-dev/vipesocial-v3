@@ -101,7 +101,8 @@ export default function RoteirosPage() {
     }
 
     fetchScripts();
-  }, [analysisId, supabase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [analysisId]);
 
   if (loading) {
     return (

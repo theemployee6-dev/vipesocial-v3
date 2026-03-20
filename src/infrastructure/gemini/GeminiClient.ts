@@ -8,7 +8,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 // gemini-1.5-pro aceita vídeo diretamente como input.
 export function getGeminiModel() {
   return genAI.getGenerativeModel({
-    model: "gemini-1.5-pro",
+    model: "gemini-3-flash-preview",
     generationConfig: {
       // Temperatura 0.7 — criativo mas consistente.
       // Valores mais altos geram outputs mais variados

@@ -8,7 +8,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import { VideoUploader } from "@/shared/components/VideoUploader/VideoUploader";
-import { inngest } from "@/infrastructure/inngest/InngestClient";
 
 // Schema de validação das métricas
 const metricasSchema = z.object({
@@ -134,13 +133,16 @@ export default function NovaAnalisePage() {
         return;
       }
 
-      // Dispara o evento para o Inngest iniciar o workflow
-      await inngest.send({
-        name: "vipesocial/analysis.started",
-        data: {
-          analysisId: analysisRecord.id,
-        },
+      const inngestResponse = await fetch("/api/analysis/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ analysisId: analysisRecord.id }),
       });
+
+      if (!inngestResponse.ok) {
+        toast.error("Erro ao iniciar análise. Tente novamente.");
+        return;
+      }
 
       toast.success("Análise iniciada! Processando seu vídeo...");
       router.push(`/analise/${analysisRecord.id}`);

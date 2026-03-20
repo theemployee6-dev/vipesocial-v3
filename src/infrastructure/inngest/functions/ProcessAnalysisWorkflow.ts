@@ -1,5 +1,6 @@
 import { inngest } from "../InngestClient";
-import { createServerSupabaseClient } from "@/infrastructure/supabase/server";
+
+import { createServiceSupabaseClient } from "@/infrastructure/supabase/server";
 import { runPrompt1 } from "@/infrastructure/gemini/prompts/prompt1";
 import { runPrompt2 } from "@/infrastructure/gemini/prompts/prompt2";
 import { runPrompt3 } from "@/infrastructure/gemini/prompts/prompt3";
@@ -20,7 +21,7 @@ export const processAnalysisWorkflow = inngest.createFunction(
 
     // Busca todos os dados necessários para o workflow
     const analysisData = await step.run("fetch-analysis-data", async () => {
-      const supabase = await createServerSupabaseClient();
+      const supabase = createServiceSupabaseClient();
 
       // Busca a análise
       const { data: analysis, error: analysisError } = await supabase
@@ -75,7 +76,7 @@ export const processAnalysisWorkflow = inngest.createFunction(
     // PROMPT 1 — Análise estrutural e emocional do vídeo
     // ============================================================
     const prompt1Result = await step.run("run-prompt1", async () => {
-      const supabase = await createServerSupabaseClient();
+      const supabase = createServiceSupabaseClient();
 
       // Atualiza status para processing_prompt1
       await supabase
@@ -159,7 +160,7 @@ export const processAnalysisWorkflow = inngest.createFunction(
 
     // Se o timeout expirar sem confirmação, falha a análise
     if (!nicheConfirmation) {
-      const supabase = await createServerSupabaseClient();
+      const supabase = createServiceSupabaseClient();
       await supabase
         .from("analyses")
         .update({
@@ -181,8 +182,7 @@ export const processAnalysisWorkflow = inngest.createFunction(
     // PROMPT 2 — Destilação emocional
     // ============================================================
     const prompt2Result = await step.run("run-prompt2", async () => {
-      const supabase = await createServerSupabaseClient();
-
+      const supabase = createServiceSupabaseClient();
       await supabase
         .from("analyses")
         .update({
@@ -225,8 +225,7 @@ export const processAnalysisWorkflow = inngest.createFunction(
     // PROMPT 3 — Reconstrução cultural
     // ============================================================
     const prompt3Result = await step.run("run-prompt3", async () => {
-      const supabase = await createServerSupabaseClient();
-
+      const supabase = createServiceSupabaseClient();
       await supabase
         .from("analyses")
         .update({
@@ -271,7 +270,7 @@ export const processAnalysisWorkflow = inngest.createFunction(
     // PROMPT 4 — Geração dos 5 roteiros
     // ============================================================
     await step.run("run-prompt4", async () => {
-      const supabase = await createServerSupabaseClient();
+      const supabase = createServiceSupabaseClient();
 
       await supabase
         .from("analyses")

@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 // Essa função é async porque o cookies() do Next.js 15
@@ -37,5 +38,16 @@ export async function createServerSupabaseClient() {
         },
       },
     },
+  );
+}
+
+// Cliente administrativo que bypassa o RLS.
+// Usa a SERVICE_ROLE_KEY que tem permissão total no banco.
+// Usar APENAS em contextos server-side confiáveis
+// como workflows do Inngest, nunca no frontend.
+export function createServiceSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
 }
