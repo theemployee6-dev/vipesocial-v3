@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
+import LogoComponent from "@/shared/components/Logo/page";
 
 interface Script {
   id: string;
@@ -190,9 +191,9 @@ export default function RoteirosPage() {
             Dashboard
           </button>
 
-          <span className="font-syne text-sm font-bold text-[#e8e8f8]">
-            vipe<span className="text-[#7c5cfc]">Social</span>
-          </span>
+          <section className="flex items-center w-full max-w-[120] sm:max-w-[120] md:max-w-[130] lg:max-w-[140]">
+            <LogoComponent priority />
+          </section>
 
           <div className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 bg-[rgba(34,197,94,0.08)] border border-[rgba(34,197,94,0.15)]">
             <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
