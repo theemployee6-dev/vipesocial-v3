@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import LogoComponent from "@/shared/components/Logo/page";
+import { getGreeting } from "@/shared/utils/time";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -459,7 +460,7 @@ export default function DashboardPage() {
             <div className="flex items-start justify-between mb-10">
               <div>
                 <h1 className="font-syne text-2xl font-bold text-[#e8e8f8] mb-1">
-                  Bom dia, {firstName}
+                  {getGreeting()} {firstName}
                 </h1>
                 <p className="font-dm-sans text-sm text-[#3a3a55]">
                   Aqui está um resumo da sua atividade.

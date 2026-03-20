@@ -70,7 +70,7 @@ export default function RecuperarSenhaPage() {
         <TopGlowLineComponent />
 
         {/* Logo */}
-        <section className="flex items-center justify-start ">
+        <section className="flex items-center justify-start mb-3">
           <LogoComponent />
         </section>
 
