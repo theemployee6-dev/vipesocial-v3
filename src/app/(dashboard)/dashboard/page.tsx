@@ -22,6 +22,7 @@ import {
   Menu,
 } from "lucide-react";
 import clsx from "clsx";
+import LogoComponent from "@/shared/components/Logo/page";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -273,10 +274,11 @@ function Sidebar({ mobile = false, profile, onLogout }: SidebarProps) {
       )}
     >
       {/* Logo */}
-      <div className="px-2 mb-8">
-        <span className="font-syne text-base font-extrabold text-[#e8e8f8]">
+      <div className="w-[66%] px-2 mb-8">
+        {/* <span className="font-syne text-base font-extrabold text-[#e8e8f8]">
           vipe<span className="text-[#7c5cfc]">Social</span>
-        </span>
+        </span> */}
+        <LogoComponent />
       </div>
 
       {/* Nav */}
@@ -438,8 +440,9 @@ export default function DashboardPage() {
           >
             <Menu size={20} />
           </button>
-          <span className="font-syne text-sm font-extrabold text-[#e8e8f8]">
-            vipe<span className="text-[#7c5cfc]">Social</span>
+          <span className="w-[25%] sm:w-[12%] md:w-[15%] lg:w-[15%] xl:w-[10%] font-syne text-sm font-extrabold text-[#e8e8f8]">
+            {/* vipe<span className="text-[#7c5cfc]">Social</span> */}
+            <LogoComponent />
           </span>
           <button
             onClick={() => router.push("/nova-analise")}
