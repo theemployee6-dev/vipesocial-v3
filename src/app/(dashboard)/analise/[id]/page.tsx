@@ -439,6 +439,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
+import { toast } from "sonner";
+import { inngest } from "@/infrastructure/inngest/InngestClient";
 
 // Os status possíveis de uma análise em ordem de progressão
 const STEPS = [
@@ -561,20 +563,28 @@ export default function AnalisePage() {
         ? analysis?.confirmed_niche
         : customNiche || nicheInput;
 
-      const { error } = await supabase
+      if (!niche) return;
+
+      // Atualiza o banco
+      await supabase
         .from("analyses")
         .update({
           confirmed_niche: niche,
-          status: "processing_prompt2",
           niche_confirmed_at: new Date().toISOString(),
         })
         .eq("id", analysisId);
 
-      if (error) {
-        console.error("Erro ao confirmar nicho:", error);
-      }
+      // Dispara o evento para o Inngest retomar o workflow
+      await inngest.send({
+        name: "vipesocial/niche.confirmed",
+        data: {
+          analysisId,
+          confirmedNiche: niche,
+        },
+      });
     } catch (err) {
-      console.error("Erro inesperado:", err);
+      console.error("Erro ao confirmar nicho:", err);
+      toast.error("Erro ao confirmar nicho. Tente novamente.");
     } finally {
       setConfirmingNiche(false);
     }
