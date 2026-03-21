@@ -95,9 +95,7 @@ export default function LoginPage() {
         <TopGlowLineComponent />
 
         {/* Logo */}
-        <section className="mb-5">
-          <LogoComponent />
-        </section>
+        <LogoComponent className="max-w-[clamp(180px,15vw,200px)] md:max-w-[clamp(180px,12vw,280px)] lg:max-w-[clamp(220px,10vw,350px)] mb-5" />
 
         {/* Pill */}
         <PillComponent />

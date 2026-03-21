@@ -32,6 +32,8 @@ export function useAuth() {
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        // redirectTo:
+        //   "https://uninterpretively-objurgative-nerissa.ngrok-free.dev/auth/callback",
       },
     });
 

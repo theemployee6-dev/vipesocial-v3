@@ -1,17 +1,18 @@
 import clsx from "clsx";
-import Image from "next/image"; // ou clsx, se preferir
+import Image from "next/image";
 
 interface LogoComponentProps {
-  className?: string; // para controlar o tamanho do container externamente
-  priority?: boolean; // opcional, para controlar prioridade de carregamento
+  className?: string;
+  priority?: boolean;
 }
 
 const LogoComponent = ({ className, priority = false }: LogoComponentProps) => {
   return (
     <div
       className={clsx(
-        "flex items-center w-full max-w-[200] sm:max-w-[180] md:max-w-[200] lg:max-w-[240]",
-        className,
+        "flex items-center w-full",
+        "max-w-[clamp(120px,20vw,280px)]", // valor padrão
+        className, // permite sobrescrever
       )}
     >
       <Image
@@ -19,7 +20,7 @@ const LogoComponent = ({ className, priority = false }: LogoComponentProps) => {
         alt="VipeSocial Logo"
         width={250}
         height={28}
-        sizes="(max-width: 640px) 180px, (max-width: 768px) 200px, (max-width: 1024px) 220px, 250px"
+        sizes="20vw"
         className="w-full h-auto"
         priority={priority}
       />

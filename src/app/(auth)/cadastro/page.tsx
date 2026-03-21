@@ -104,9 +104,7 @@ export default function CadastroPage() {
         <TopGlowLineComponent />
 
         {/* Logo */}
-        <section className="w-full max-w-[200] mb-5">
-          <LogoComponent priority />
-        </section>
+        <LogoComponent className="max-w-[clamp(180px,15vw,200px)] md:max-w-[clamp(180px,12vw,280px)] lg:max-w-[clamp(220px,10vw,350px)] mb-5" />
 
         {/* Pill */}
         <PillComponent />

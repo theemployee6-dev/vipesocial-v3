@@ -460,7 +460,7 @@ export default function DashboardPage() {
             <div className="flex items-start justify-between mb-10">
               <div>
                 <h1 className="font-syne text-2xl font-bold text-[#e8e8f8] mb-1">
-                  {getGreeting()} {firstName}
+                  {getGreeting()}, {firstName}
                 </h1>
                 <p className="font-dm-sans text-sm text-[#3a3a55]">
                   Aqui está um resumo da sua atividade.
@@ -576,3 +576,559 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+// //design clean
+// "use client";
+
+// import { useEffect, useState, useMemo } from "react";
+// import { useRouter } from "next/navigation";
+// import Image from "next/image";
+// import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
+// import { useAuth } from "@/shared/hooks/useAuth";
+// import clsx from "clsx";
+
+// // ─── Tipos ────────────────────────────────────────────────────────────────────
+
+// interface Analysis {
+//   id: string;
+//   status: string;
+//   confirmed_niche: string | null;
+//   created_at: string;
+// }
+
+// interface Profile {
+//   full_name: string | null;
+//   avatar_url: string | null;
+// }
+
+// interface Stats {
+//   total: number;
+//   completed: number;
+//   scripts: number;
+// }
+
+// // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// const STATUS: Record<string, { dot: string; label: string }> = {
+//   pending: { dot: "bg-zinc-600", label: "Aguardando" },
+//   processing_prompt1: {
+//     dot: "bg-violet-500 animate-pulse",
+//     label: "Analisando",
+//   },
+//   awaiting_niche_confirmation: {
+//     dot: "bg-amber-400",
+//     label: "Confirmar nicho",
+//   },
+//   processing_prompt2: { dot: "bg-violet-500 animate-pulse", label: "Emoções" },
+//   processing_prompt3: {
+//     dot: "bg-violet-500 animate-pulse",
+//     label: "Adaptando",
+//   },
+//   processing_prompt4: { dot: "bg-violet-500 animate-pulse", label: "Roteiros" },
+//   completed: { dot: "bg-emerald-400", label: "Concluída" },
+//   failed: { dot: "bg-red-500", label: "Falhou" },
+// };
+
+// function fmt(d: string) {
+//   return new Date(d).toLocaleDateString("pt-BR", {
+//     day: "2-digit",
+//     month: "short",
+//   });
+// }
+
+// function initials(name: string | null) {
+//   if (!name) return "?";
+//   const parts = name.trim().split(" ");
+//   if (parts.length === 0) return "?";
+//   const first = parts[0][0] || "";
+//   const second = parts[1]?.[0] || "";
+//   return (first + second).toUpperCase();
+// }
+
+// // ─── Componente principal ─────────────────────────────────────────────────────
+
+// export default function DashboardPage() {
+//   const router = useRouter();
+//   const { logout } = useAuth();
+//   const supabase = useMemo(() => createClientSupabaseClient(), []);
+
+//   const [profile, setProfile] = useState<Profile | null>(null);
+//   const [analyses, setAnalyses] = useState<Analysis[]>([]);
+//   const [stats, setStats] = useState<Stats>({
+//     total: 0,
+//     completed: 0,
+//     scripts: 0,
+//   });
+//   const [loading, setLoading] = useState(true);
+//   const [nav, setNav] = useState<"dashboard" | "analyses" | "scripts">(
+//     "dashboard",
+//   );
+//   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+//   useEffect(() => {
+//     async function load() {
+//       const {
+//         data: { user },
+//       } = await supabase.auth.getUser();
+//       if (!user) return;
+
+//       const [{ data: prof }, { data: ans }, { count: sc }] = await Promise.all([
+//         supabase
+//           .from("profiles")
+//           .select("full_name, avatar_url")
+//           .eq("id", user.id)
+//           .single(),
+//         supabase
+//           .from("analyses")
+//           .select("id, status, confirmed_niche, created_at")
+//           .eq("user_id", user.id)
+//           .is("deleted_at", null)
+//           .order("created_at", { ascending: false })
+//           .limit(30),
+//         supabase
+//           .from("scripts")
+//           .select("*", { count: "exact", head: true })
+//           .eq("user_id", user.id),
+//       ]);
+
+//       if (prof) setProfile(prof);
+//       if (ans) {
+//         setAnalyses(ans);
+//         setStats({
+//           total: ans.length,
+//           completed: ans.filter((a) => a.status === "completed").length,
+//           scripts: sc || 0,
+//         });
+//       }
+//       setLoading(false);
+//     }
+//     load();
+//   }, [supabase]);
+
+//   const firstName = profile?.full_name?.split(" ")[0] ?? "Criador";
+//   const activeAnal = analyses.find(
+//     (a) => !["completed", "failed"].includes(a.status),
+//   );
+
+//   // ─── Loading ──────────────────────────────────────────────────────────────
+//   if (loading) {
+//     return (
+//       <div className="h-screen bg-[#09090f] flex items-center justify-center">
+//         <div className="w-5 h-5 border border-zinc-700 border-t-violet-500 rounded-full animate-spin" />
+//       </div>
+//     );
+//   }
+
+//   // ─── Layout ───────────────────────────────────────────────────────────────
+//   return (
+//     <div className="h-screen bg-[#09090f] flex overflow-hidden font-dm-sans">
+//       {/* ── Sidebar (desktop) ─────────────────────────────────────────────── */}
+//       <aside
+//         className={clsx(
+//           "fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-52 shrink-0 bg-[#09090f] border-r border-white/5",
+//           sidebarOpen ? "translate-x-0" : "-translate-x-full",
+//         )}
+//       >
+//         <div className="flex flex-col h-full py-5 px-3">
+//           {/* Logo */}
+//           <div className="px-2 mb-8 mt-1">
+//             <span className="font-syne text-[15px] font-extrabold tracking-tight text-white">
+//               vipe<span className="text-violet-400">Social</span>
+//             </span>
+//           </div>
+
+//           {/* Nav */}
+//           <nav className="flex flex-col gap-0.5">
+//             {(
+//               [
+//                 ["dashboard", "Dashboard"],
+//                 ["analyses", "Análises"],
+//                 ["scripts", "Roteiros"],
+//               ] as const
+//             ).map(([id, label]) => (
+//               <button
+//                 key={id}
+//                 onClick={() => {
+//                   setNav(id);
+//                   setSidebarOpen(false);
+//                 }}
+//                 className={clsx(
+//                   "text-left text-[13px] px-2.5 py-2 rounded-lg transition-colors",
+//                   nav === id
+//                     ? "bg-white/5 text-white font-medium"
+//                     : "text-zinc-500 hover:text-zinc-300",
+//                 )}
+//               >
+//                 {label}
+//               </button>
+//             ))}
+//           </nav>
+
+//           <div className="flex-1" />
+
+//           {/* User */}
+//           <div className="px-2 pb-1 flex items-center gap-2.5">
+//             <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center shrink-0">
+//               {profile?.avatar_url ? (
+//                 <Image
+//                   src={profile.avatar_url}
+//                   alt="Avatar"
+//                   width={32} // defina a largura desejada
+//                   height={32} // defina a altura desejada
+//                   className="rounded-full object-cover"
+//                 />
+//               ) : (
+//                 <span className="text-[9px] font-bold text-violet-400">
+//                   {initials(profile?.full_name ?? null)}
+//                 </span>
+//               )}
+//             </div>
+//             <span className="text-[12px] text-zinc-400 truncate flex-1">
+//               {profile?.full_name ?? "Usuário"}
+//             </span>
+//             <button
+//               onClick={logout}
+//               className="text-zinc-600 hover:text-zinc-400 transition-colors text-[11px]"
+//               title="Sair"
+//             >
+//               ↗
+//             </button>
+//           </div>
+//         </div>
+//       </aside>
+
+//       {/* Overlay mobile para sidebar */}
+//       {sidebarOpen && (
+//         <div
+//           className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+//           onClick={() => setSidebarOpen(false)}
+//         />
+//       )}
+
+//       {/* ── Main ────────────────────────────────────────────────────────── */}
+//       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+//         {/* Topbar */}
+//         <header className="flex items-center justify-between px-4 sm:px-8 py-4 border-b border-white/5 shrink-0">
+//           <div className="flex items-center gap-6">
+//             {/* Botão menu mobile */}
+//             <button
+//               onClick={() => setSidebarOpen(true)}
+//               className="lg:hidden text-zinc-400 hover:text-white transition-colors"
+//             >
+//               <span className="text-xl">☰</span>
+//             </button>
+//             {/* Mobile logo */}
+//             <span className="lg:hidden font-syne text-[15px] font-extrabold text-white">
+//               vipe<span className="text-violet-400">Social</span>
+//             </span>
+//             {/* Desktop breadcrumb */}
+//             <span className="hidden lg:block text-[13px] text-zinc-500">
+//               {nav === "dashboard" && "Dashboard"}
+//               {nav === "analyses" && "Análises"}
+//               {nav === "scripts" && "Roteiros"}
+//             </span>
+//           </div>
+
+//           <button
+//             onClick={() => router.push("/nova-analise")}
+//             className="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 transition-colors text-white text-[13px] font-medium px-3.5 py-1.5 rounded-lg"
+//           >
+//             <span className="text-base leading-none">+</span>
+//             Nova análise
+//           </button>
+//         </header>
+
+//         {/* Content */}
+//         <main className="flex-1 overflow-y-auto px-4 sm:px-8 py-8">
+//           <div className="max-w-[820] mx-auto">
+//             {/* Dashboard view */}
+//             {nav === "dashboard" && (
+//               <>
+//                 {/* Greeting */}
+//                 <div className="mb-10">
+//                   <h1 className="font-syne text-[26px] font-bold text-white tracking-tight mb-1">
+//                     Olá, {firstName}
+//                   </h1>
+//                   <p className="text-[13px] text-zinc-500">
+//                     {stats.total === 0
+//                       ? "Comece sua primeira análise para descobrir o DNA do seu vídeo viral."
+//                       : `${stats.completed} de ${stats.total} análises concluídas · ${stats.scripts} roteiros gerados`}
+//                   </p>
+//                 </div>
+
+//                 {/* Análise ativa */}
+//                 {activeAnal && (
+//                   <div
+//                     onClick={() => router.push(`/analise/${activeAnal.id}`)}
+//                     className="mb-8 p-4 rounded-xl border border-violet-500/20 bg-violet-500/5 cursor-pointer hover:border-violet-500/30 hover:bg-violet-500/10 transition-all"
+//                   >
+//                     <div className="flex items-center justify-between">
+//                       <div className="flex items-center gap-2.5">
+//                         <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+//                         <span className="text-[12px] text-violet-400 font-medium uppercase tracking-wider">
+//                           Em andamento
+//                         </span>
+//                       </div>
+//                       <span className="text-[12px] text-zinc-600">
+//                         {fmt(activeAnal.created_at)}
+//                       </span>
+//                     </div>
+//                     <div className="mt-2 flex items-center justify-between">
+//                       <p className="text-[14px] text-white font-medium">
+//                         {STATUS[activeAnal.status]?.label ?? "Processando"} ·{" "}
+//                         {activeAnal.confirmed_niche ?? "identificando nicho"}
+//                       </p>
+//                       <span className="text-[12px] text-violet-400">
+//                         Acompanhar →
+//                       </span>
+//                     </div>
+//                   </div>
+//                 )}
+
+//                 {/* Stats row */}
+//                 <div className="grid grid-cols-3 gap-px bg-white/5 rounded-xl overflow-hidden mb-8">
+//                   {[
+//                     { label: "Análises", value: stats.total },
+//                     { label: "Concluídas", value: stats.completed },
+//                     { label: "Roteiros", value: stats.scripts },
+//                   ].map(({ label, value }) => (
+//                     <div key={label} className="bg-[#09090f] px-5 py-5">
+//                       <p className="font-syne text-[28px] font-bold text-white leading-none mb-1.5">
+//                         {value}
+//                       </p>
+//                       <p className="text-[12px] text-zinc-500">{label}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+
+//                 {/* Análises recentes */}
+//                 <div>
+//                   <div className="flex items-center justify-between mb-3">
+//                     <span className="text-[12px] text-zinc-500 uppercase tracking-wider font-medium">
+//                       Análises recentes
+//                     </span>
+//                     {analyses.length > 0 && (
+//                       <span className="text-[12px] text-zinc-600">
+//                         {analyses.length} total
+//                       </span>
+//                     )}
+//                   </div>
+
+//                   {analyses.length === 0 ? (
+//                     <div className="py-16 flex flex-col items-center text-center">
+//                       <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center mb-4">
+//                         <span className="text-zinc-600 text-lg">↑</span>
+//                       </div>
+//                       <p className="text-[14px] text-zinc-400 font-medium mb-1">
+//                         Nenhuma análise ainda
+//                       </p>
+//                       <p className="text-[12px] text-zinc-600 mb-5 max-w-64">
+//                         Suba um vídeo que viralizou e descubra por que ele
+//                         funcionou.
+//                       </p>
+//                       <button
+//                         onClick={() => router.push("/nova-analise")}
+//                         className="text-[13px] text-violet-400 hover:text-violet-300 transition-colors"
+//                       >
+//                         Fazer primeira análise →
+//                       </button>
+//                     </div>
+//                   ) : (
+//                     <div className="border border-white/5 rounded-xl overflow-hidden">
+//                       {analyses.map((a, i) => {
+//                         const s = STATUS[a.status] ?? STATUS.pending;
+//                         const done = a.status === "completed";
+//                         const active = !done && a.status !== "failed";
+
+//                         return (
+//                           <div
+//                             key={a.id}
+//                             className={clsx(
+//                               "flex items-center gap-4 px-4 py-3 cursor-pointer transition-colors",
+//                               "hover:bg-white/5",
+//                               i !== analyses.length - 1 &&
+//                                 "border-b border-white/5",
+//                             )}
+//                             onClick={() =>
+//                               done
+//                                 ? router.push(`/analise/${a.id}/roteiros`)
+//                                 : router.push(`/analise/${a.id}`)
+//                             }
+//                           >
+//                             <div
+//                               className={clsx(
+//                                 "w-1.5 h-1.5 rounded-full shrink-0",
+//                                 s.dot,
+//                               )}
+//                             />
+//                             <span className="text-[13px] text-zinc-300 flex-1 min-w-0 truncate">
+//                               {a.confirmed_niche ?? (
+//                                 <span className="text-zinc-600 italic">
+//                                   sem nicho
+//                                 </span>
+//                               )}
+//                             </span>
+//                             <span
+//                               className={clsx(
+//                                 "text-[11px] shrink-0 hidden sm:block",
+//                                 done
+//                                   ? "text-emerald-500"
+//                                   : active
+//                                     ? "text-violet-400"
+//                                     : "text-zinc-600",
+//                               )}
+//                             >
+//                               {s.label}
+//                             </span>
+//                             <span className="text-[11px] text-zinc-600 shrink-0 w-14 text-right">
+//                               {fmt(a.created_at)}
+//                             </span>
+//                             <span className="text-[11px] text-zinc-700 shrink-0 ml-1">
+//                               →
+//                             </span>
+//                           </div>
+//                         );
+//                       })}
+//                     </div>
+//                   )}
+//                 </div>
+//               </>
+//             )}
+
+//             {/* Analyses view (lista completa) */}
+//             {nav === "analyses" && (
+//               <>
+//                 <div className="mb-6">
+//                   <h1 className="font-syne text-[26px] font-bold text-white tracking-tight mb-1">
+//                     Análises
+//                   </h1>
+//                   <p className="text-[13px] text-zinc-500">
+//                     Todas as análises que você já realizou.
+//                   </p>
+//                 </div>
+
+//                 {analyses.length === 0 ? (
+//                   <div className="py-16 flex flex-col items-center text-center">
+//                     <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center mb-4">
+//                       <span className="text-zinc-600 text-lg">↑</span>
+//                     </div>
+//                     <p className="text-[14px] text-zinc-400 font-medium mb-1">
+//                       Nenhuma análise ainda
+//                     </p>
+//                     <p className="text-[12px] text-zinc-600 mb-5 max-w-64">
+//                       Suba um vídeo que viralizou e descubra por que ele
+//                       funcionou.
+//                     </p>
+//                     <button
+//                       onClick={() => router.push("/nova-analise")}
+//                       className="text-[13px] text-violet-400 hover:text-violet-300 transition-colors"
+//                     >
+//                       Fazer primeira análise →
+//                     </button>
+//                   </div>
+//                 ) : (
+//                   <div className="border border-white/5 rounded-xl overflow-hidden">
+//                     {analyses.map((a, i) => {
+//                       const s = STATUS[a.status] ?? STATUS.pending;
+//                       const done = a.status === "completed";
+//                       const active = !done && a.status !== "failed";
+
+//                       return (
+//                         <div
+//                           key={a.id}
+//                           className={clsx(
+//                             "flex items-center gap-4 px-4 py-3 cursor-pointer transition-colors",
+//                             "hover:bg-white/5",
+//                             i !== analyses.length - 1 &&
+//                               "border-b border-white/5",
+//                           )}
+//                           onClick={() =>
+//                             done
+//                               ? router.push(`/analise/${a.id}/roteiros`)
+//                               : router.push(`/analise/${a.id}`)
+//                           }
+//                         >
+//                           <div
+//                             className={clsx(
+//                               "w-1.5 h-1.5 rounded-full shrink-0",
+//                               s.dot,
+//                             )}
+//                           />
+//                           <span className="text-[13px] text-zinc-300 flex-1 min-w-0 truncate">
+//                             {a.confirmed_niche ?? (
+//                               <span className="text-zinc-600 italic">
+//                                 sem nicho
+//                               </span>
+//                             )}
+//                           </span>
+//                           <span
+//                             className={clsx(
+//                               "text-[11px] shrink-0 hidden sm:block",
+//                               done
+//                                 ? "text-emerald-500"
+//                                 : active
+//                                   ? "text-violet-400"
+//                                   : "text-zinc-600",
+//                             )}
+//                           >
+//                             {s.label}
+//                           </span>
+//                           <span className="text-[11px] text-zinc-600 shrink-0 w-14 text-right">
+//                             {fmt(a.created_at)}
+//                           </span>
+//                           <span className="text-[11px] text-zinc-700 shrink-0 ml-1">
+//                             →
+//                           </span>
+//                         </div>
+//                       );
+//                     })}
+//                   </div>
+//                 )}
+//               </>
+//             )}
+
+//             {/* Scripts view (placeholder) */}
+//             {nav === "scripts" && (
+//               <>
+//                 <div className="mb-6">
+//                   <h1 className="font-syne text-[26px] font-bold text-white tracking-tight mb-1">
+//                     Roteiros
+//                   </h1>
+//                   <p className="text-[13px] text-zinc-500">
+//                     Seus roteiros gerados pela IA.
+//                   </p>
+//                 </div>
+
+//                 {stats.scripts === 0 ? (
+//                   <div className="py-16 flex flex-col items-center text-center">
+//                     <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center mb-4">
+//                       <span className="text-zinc-600 text-lg">🎬</span>
+//                     </div>
+//                     <p className="text-[14px] text-zinc-400 font-medium mb-1">
+//                       Nenhum roteiro ainda
+//                     </p>
+//                     <p className="text-[12px] text-zinc-600 mb-5 max-w-64">
+//                       As análises concluídas geram roteiros automaticamente.
+//                     </p>
+//                     <button
+//                       onClick={() => router.push("/nova-analise")}
+//                       className="text-[13px] text-violet-400 hover:text-violet-300 transition-colors"
+//                     >
+//                       Fazer primeira análise →
+//                     </button>
+//                   </div>
+//                 ) : (
+//                   <div className="border border-white/5 rounded-xl p-6 text-center">
+//                     <p className="text-[14px] text-zinc-400">
+//                       Lista de roteiros aparecerá aqui.
+//                     </p>
+//                   </div>
+//                 )}
+//               </>
+//             )}
+//           </div>
+//         </main>
+//       </div>
+//     </div>
+//   );
+// }
