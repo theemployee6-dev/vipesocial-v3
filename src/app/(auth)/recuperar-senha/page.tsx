@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import BackLinkComponent from "../_shared/_components/BackLink/page";
+import BackLinkComponent from "../_shared/_components/BackLink/BackLink";
 
 import CardWrapper from "@/shared/components/CardWrapper/page";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
