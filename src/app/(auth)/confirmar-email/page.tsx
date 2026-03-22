@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopGlowLineComponent from "../../../shared/components/TopGlowLine/page";
+import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
 import LogoComponent from "@/shared/components/Logo/page";
 import HeaderComponent from "@/shared/components/Header/page";
 
