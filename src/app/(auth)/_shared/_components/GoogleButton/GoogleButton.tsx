@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { GoogleIcon } from "./components/GoogleIcon";
+import { GoogleIcon } from "./_components/GoogleIcon";
 interface GoogleButtonProps {
   title: string;
   severError?: string | null;

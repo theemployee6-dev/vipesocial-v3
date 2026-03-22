@@ -9,17 +9,17 @@ import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
 import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
-import OnboardingHeader from "../components/OnboardingHeader/page";
+import OnboardingHeader from "../_components/OnboardingHeader/OnboardingHeader";
 import HeaderComponent from "@/shared/components/Header/page";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
 import MainButton from "@/shared/components/MainButton/page";
-import ProgressBar from "../components/ProgressBar/page";
-import BackButton from "../components/BackButton/page";
-import OnboardingMainButton from "../components/OnboardingMainButton/page";
-import RadioButton from "../components/RadioButton/page";
-import Label from "../components/Label/page";
+import ProgressBar from "../_components/ProgressBar/ProgressBar";
+import BackButton from "../_components/BackButton/BackButton";
+import OnboardingMainButton from "../_components/OnboardingMainButton/OnboardingMainButton";
+import RadioButton from "../_components/RadioButton/RadioButton";
+import Label from "../_components/Label/Label";
 import CardWrapper from "@/shared/components/CardWrapper/page";
-import CheckboxButton from "../components/CheckboxButton/page";
+import CheckboxButton from "../_components/CheckboxButton/CheckboxButton";
 
 // Schema de validação para cada etapa
 const step1Schema = z.object({

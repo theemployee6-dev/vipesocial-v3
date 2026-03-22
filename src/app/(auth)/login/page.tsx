@@ -1,15 +1,15 @@
 "use client";
 
 // Componentes visuais compartilhados (layout/estrutura)
-import BackLinkComponent from "../shared/components/BackLink/page";
+import BackLinkComponent from "../_shared/_components/BackLink/BackLink";
 import CardWrapper from "@/shared/components/CardWrapper/page";
-import DividerComponent from "../shared/components/Divider/page";
-import FooterComponent from "../shared/components/Footer/page";
+import DividerComponent from "../_shared/_components/Divider/Divider";
+import FooterComponent from "../_shared/_components/Footer/Footer";
 
-import NoiseTextureComponent from "../shared/components/NoiseTexture/page";
-import PillComponent from "../shared/components/Pill/page";
-import ProofStatsComponent from "../shared/components/ProofStats/page";
-import TermFooterComponent from "../shared/components/TermFooter/page";
+import NoiseTextureComponent from "../_shared/_components/NoiseTexture/NoiseTexture";
+import PillComponent from "../_shared/_components/Pill/Pill";
+import ProofStatsComponent from "../_shared/_components/ProofStats/ProofStats";
+import TermFooterComponent from "../_shared/_components/TermFooter/TermFooter";
 import TopGlowLineComponent from "../../../shared/components/TopGlowLine/page";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
 import HeaderComponent from "@/shared/components/Header/page";
@@ -20,10 +20,10 @@ import MainButton from "@/shared/components/MainButton/page";
 import { useState } from "react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import FieldInput from "../../../shared/components/FieldInput/FieldInput";
-import GoogleButtonComponent from "../shared/components/GoogleButton/page";
+import GoogleButtonComponent from "../_shared/_components/GoogleButton/GoogleButton";
 
 // Componentes específicos desta página (não reutilizados em outras rotas)
-import RememberAndForgotComponent from "./components/RememberForgot/page";
+import RememberAndForgotComponent from "./_components/RememberForgot/RememberForgot";
 import { useForm } from "react-hook-form";
 import { LoginFormData, loginSchema } from "@/shared/utils/validations";
 import { zodResolver } from "@hookform/resolvers/zod";

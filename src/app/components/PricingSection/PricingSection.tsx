@@ -1,7 +1,7 @@
 import {
   StarterButton,
   ProButton,
-} from "../../(marketing)/components/PricingButtons";
+} from "../../(marketing)/_components/PricingButtons";
 
 export default function PricingSection() {
   return (

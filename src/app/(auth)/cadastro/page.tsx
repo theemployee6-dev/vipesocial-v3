@@ -1,21 +1,21 @@
 "use client";
 
 // Componentes de fundo e estrutura
-import BackLinkComponent from "../shared/components/BackLink/page";
+import BackLinkComponent from "../_shared/_components/BackLink/BackLink";
 import CardWrapper from "@/shared/components/CardWrapper/page";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
-import NoiseTextureComponent from "../shared/components/NoiseTexture/page";
+import NoiseTextureComponent from "../_shared/_components/NoiseTexture/NoiseTexture";
 
 // Componentes de UI e conteúdo
-import DividerComponent from "../shared/components/Divider/page";
-import FooterComponent from "../shared/components/Footer/page";
-import GoogleButtonComponent from "../shared/components/GoogleButton/page";
+import DividerComponent from "../_shared/_components/Divider/Divider";
+import FooterComponent from "../_shared/_components/Footer/Footer";
+import GoogleButtonComponent from "../_shared/_components/GoogleButton/GoogleButton";
 import HeaderComponent from "@/shared/components/Header/page";
 import LogoComponent from "@/shared/components/Logo/page";
 import MainButton from "@/shared/components/MainButton/page";
-import PillComponent from "../shared/components/Pill/page";
-import ProofStatsComponent from "../shared/components/ProofStats/page";
-import TermFooterComponent from "../shared/components/TermFooter/page";
+import PillComponent from "../_shared/_components/Pill/Pill";
+import ProofStatsComponent from "../_shared/_components/ProofStats/ProofStats";
+import TermFooterComponent from "../_shared/_components/TermFooter/TermFooter";
 import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
 
 // Componentes de formulário

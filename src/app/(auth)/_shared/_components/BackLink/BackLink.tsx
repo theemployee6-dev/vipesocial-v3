@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 interface BackLinkProps {
-  href: string; // ou UrlObject, se precisar de objetos complexos
+  href: string;
 }
 
 const BackLinkComponent = ({ href }: BackLinkProps) => {
