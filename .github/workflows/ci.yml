@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  lint-and-typecheck:
+    name: Lint e TypeCheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configura Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Instala dependências
+        run: npm ci
+
+      - name: Roda o TypeScript
+        run: npx tsc --noEmit
+
+      - name: Roda o ESLint
+        run: npm run lint
