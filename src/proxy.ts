@@ -76,6 +76,6 @@ export async function proxy(request: NextRequest) {
 // requisições desnecessárias e manter o middleware rápido.
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api/inngest|api/uploadthing|api/analysis|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/inngest|api/uploadthing|api/analysis|api/stripe|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

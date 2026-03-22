@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse, type NextRequest } from "next/server";
-import { stripe } from "@/infrastructure/stripe/StripeClient";
+import { stripe, PLAN_LIMITS } from "@/infrastructure/stripe/StripeClient";
 import { createServiceSupabaseClient } from "@/infrastructure/supabase/server";
-import { PLAN_LIMITS } from "@/infrastructure/stripe/StripeClient";
 
-// CRÍTICO: desabilita o body parser padrão do Next.js
-// O Stripe precisa do body raw para verificar a assinatura
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
@@ -15,7 +12,6 @@ export async function POST(request: NextRequest) {
   let event;
 
   try {
-    // Verifica que o webhook veio realmente do Stripe
     event = stripe.webhooks.constructEvent(
       body,
       signature,
@@ -29,42 +25,111 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Usa service role para bypassing do RLS
   const supabase = createServiceSupabaseClient();
 
   try {
     switch (event.type) {
-      // Pagamento confirmado — ativa a assinatura
       case "checkout.session.completed": {
         const session = event.data.object as any;
         const userId = session.metadata?.supabase_user_id;
         const plan = session.metadata?.plan;
 
-        if (!userId || !plan) break;
+        if (!userId || !plan) {
+          console.error("Metadata ausente no checkout.session.completed");
+          break;
+        }
 
         const limit = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS] || 3;
 
-        await supabase
+        // Busca o período atual da subscription no Stripe
+        // para salvar as datas corretas
+        let periodStart = null;
+        let periodEnd = null;
+
+        if (session.subscription) {
+          try {
+            const stripeSubscription = (await stripe.subscriptions.retrieve(
+              session.subscription,
+            )) as any; // cast para any por mudança de tipos no SDK
+
+            periodStart = new Date(
+              stripeSubscription.current_period_start * 1000,
+            ).toISOString();
+            periodEnd = new Date(
+              stripeSubscription.current_period_end * 1000,
+            ).toISOString();
+          } catch (err) {
+            console.error("Erro ao buscar subscription no Stripe:", err);
+          }
+        }
+
+        const { error } = await supabase
           .from("subscriptions")
           .update({
+            stripe_customer_id: session.customer,
             stripe_subscription_id: session.subscription,
-            plan: plan,
+            plan,
             status: "active",
             analyses_limit: limit,
+            analyses_used_this_period: 0,
+            current_period_start: periodStart,
+            current_period_end: periodEnd,
             updated_at: new Date().toISOString(),
           })
           .eq("user_id", userId);
 
-        console.log(`Assinatura ativada: user ${userId}, plano ${plan}`);
+        if (error) {
+          console.error("Erro ao atualizar subscription:", error);
+        } else {
+          console.log(`✅ Assinatura ativada: user ${userId}, plano ${plan}`);
+        }
+
         break;
       }
 
-      // Assinatura atualizada — troca de plano ou renovação
       case "customer.subscription.updated": {
         const subscription = event.data.object as any;
         const userId = subscription.metadata?.supabase_user_id;
 
-        if (!userId) break;
+        if (!userId) {
+          // Tenta encontrar pelo customer_id
+          const { data } = await supabase
+            .from("subscriptions")
+            .select("user_id")
+            .eq("stripe_customer_id", subscription.customer)
+            .single();
+
+          if (!data) {
+            console.error(
+              "Usuário não encontrado para customer:",
+              subscription.customer,
+            );
+            break;
+          }
+
+          const plan = subscription.metadata?.plan || "starter";
+          const limit = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS] || 3;
+
+          await supabase
+            .from("subscriptions")
+            .update({
+              status: subscription.status,
+              plan,
+              analyses_limit: limit,
+              current_period_start: new Date(
+                subscription.current_period_start * 1000,
+              ).toISOString(),
+              current_period_end: new Date(
+                subscription.current_period_end * 1000,
+              ).toISOString(),
+              cancel_at_period_end: subscription.cancel_at_period_end,
+              analyses_used_this_period: 0,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("user_id", data.user_id);
+
+          break;
+        }
 
         const plan = subscription.metadata?.plan || "starter";
         const limit = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS] || 3;
@@ -73,7 +138,7 @@ export async function POST(request: NextRequest) {
           .from("subscriptions")
           .update({
             status: subscription.status,
-            plan: plan,
+            plan,
             analyses_limit: limit,
             current_period_start: new Date(
               subscription.current_period_start * 1000,
@@ -82,7 +147,6 @@ export async function POST(request: NextRequest) {
               subscription.current_period_end * 1000,
             ).toISOString(),
             cancel_at_period_end: subscription.cancel_at_period_end,
-            // Reseta o contador de análises no início de cada período
             analyses_used_this_period: 0,
             updated_at: new Date().toISOString(),
           })
@@ -91,12 +155,26 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      // Assinatura cancelada
       case "customer.subscription.deleted": {
         const subscription = event.data.object as any;
-        const userId = subscription.metadata?.supabase_user_id;
 
-        if (!userId) break;
+        // Tenta pelo metadata primeiro, depois pelo customer_id
+        let userId = subscription.metadata?.supabase_user_id;
+
+        if (!userId) {
+          const { data } = await supabase
+            .from("subscriptions")
+            .select("user_id")
+            .eq("stripe_customer_id", subscription.customer)
+            .single();
+
+          userId = data?.user_id;
+        }
+
+        if (!userId) {
+          console.error("Usuário não encontrado para deletar subscription");
+          break;
+        }
 
         await supabase
           .from("subscriptions")
@@ -111,25 +189,23 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      // Pagamento falhou
       case "invoice.payment_failed": {
         const invoice = event.data.object as any;
-        const customerId = invoice.customer;
 
-        const { data: subscription } = await supabase
+        const { data } = await supabase
           .from("subscriptions")
           .select("user_id")
-          .eq("stripe_customer_id", customerId)
+          .eq("stripe_customer_id", invoice.customer)
           .single();
 
-        if (subscription) {
+        if (data) {
           await supabase
             .from("subscriptions")
             .update({
               status: "past_due",
               updated_at: new Date().toISOString(),
             })
-            .eq("user_id", subscription.user_id);
+            .eq("user_id", data.user_id);
         }
 
         break;
