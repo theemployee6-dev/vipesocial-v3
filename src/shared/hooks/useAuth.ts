@@ -31,8 +31,7 @@ export function useAuth() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        // redirectTo: `${window.location.origin}/auth/callback`,
-        redirectTo: "https://vipesocial-v3.vercel.app/auth/v1/callback",
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
