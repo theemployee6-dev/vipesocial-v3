@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
@@ -24,6 +25,7 @@ import {
 import clsx from "clsx";
 import LogoComponent from "@/shared/components/Logo/page";
 import { getGreeting } from "@/shared/utils/time";
+import { toast } from "sonner";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -192,6 +194,16 @@ function AnalysisRow({
     analysis.status !== "failed" &&
     analysis.status !== "pending";
   const awaitingNiche = analysis.status === "awaiting_niche_confirmation";
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("payment") === "success") {
+      toast.success("Assinatura ativada com sucesso! Bem-vindo ao plano.");
+      // Remove o parâmetro da URL sem recarregar a página
+      window.history.replaceState({}, "", "/dashboard");
+    }
+  }, [searchParams]);
 
   return (
     <div className="group flex items-center justify-between gap-4 px-4 py-3.5 rounded-xl border border-white/5 bg-[#0c0c16] hover:border-white/8 hover:bg-[#0e0e1a] transition-all">

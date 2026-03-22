@@ -1,4 +1,7 @@
-import Link from "next/link";
+import {
+  StarterButton,
+  ProButton,
+} from "../../(marketing)/components/PricingButtons";
 
 export default function PricingSection() {
   return (
@@ -62,12 +65,7 @@ export default function PricingSection() {
               ))}
             </div>
 
-            <Link
-              href="/cadastro"
-              className="w-full text-center py-3 rounded-xl border border-white/20 text-sm font-medium font-dm-sans text-zinc-300 hover:border-white/30 hover:text-white transition-all"
-            >
-              Começar
-            </Link>
+            <StarterButton />
           </div>
 
           {/* Plano Pro */}
@@ -142,16 +140,7 @@ export default function PricingSection() {
               ))}
             </div>
 
-            <Link
-              href="/cadastro"
-              className="w-full text-center py-3 rounded-xl text-sm font-bold font-dm-sans text-white transition-all hover:scale-[1.01] active:scale-[0.99]"
-              style={{
-                background: "linear-gradient(135deg, #7c5cfc 0%, #5a3de0 100%)",
-                boxShadow: "0 0 24px rgba(124,92,252,0.3)",
-              }}
-            >
-              Assinar plano anual →
-            </Link>
+            <ProButton />
           </div>
         </div>
       </div>
