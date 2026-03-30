@@ -101,7 +101,7 @@ export default function CadastroPage() {
           <BackLink href="/login" />
 
           {/* Logo (simplificada) */}
-          <LogoComponent />
+          <LogoComponent className="mb-4" />
 
           {/* Pill */}
           <Pill className="mb-4">ACESSO VIP</Pill>
