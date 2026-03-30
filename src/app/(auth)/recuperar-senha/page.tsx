@@ -9,11 +9,11 @@ import GlowsEffectComponent from "@/shared/components/GlowsEffectComponent/Glows
 import CardWrapper from "@/shared/components/CardWrapper/CardWrapper";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
 import MainButton from "@/shared/components/MainButton/MainButton";
-import { Pill } from "lucide-react";
 import BackLink from "../_shared/_components/BackLink/BackLink";
 import NoiseTexture from "../_shared/_components/NoiseTexture/NoiseTexture";
 import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 import HeaderComponent from "@/shared/components/HeaderComponent/HeaderComponent";
+import Pill from "../_shared/_components/Pill/Pill";
 
 const schema = z.object({
   email: z
@@ -61,7 +61,7 @@ export default function RecuperarSenhaPage() {
       <div className="w-full max-w-[440] z-10">
         <CardWrapper showCornerGlow>
           <BackLink href="/login" />
-          <LogoComponent />
+          <LogoComponent className="mb-4" />
           <Pill className="mb-4">RECUPERAÇÃO DE SENHA</Pill>
 
           <HeaderComponent
