@@ -7,7 +7,7 @@ const ProgressBar = ({ progressPercent }: { progressPercent: number }) => {
         className="h-1 rounded-full transition-all duration-500"
         style={{
           width: `${progressPercent}%`,
-          background: "linear-gradient(90deg, #7c5cfc, #5a3de0)",
+          background: "linear-gradient(90deg, #fe2c55, #ff6b8a)", // rosa TikTok
         }}
       />
     </div>

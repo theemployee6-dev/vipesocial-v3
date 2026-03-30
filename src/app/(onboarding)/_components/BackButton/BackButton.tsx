@@ -8,7 +8,7 @@ const BackButton = ({ title, onClick }: BackButtonProps) => {
     <button
       type="button"
       onClick={onClick}
-      className="w-1/3 rounded-xl py-3.5 text-sm font-bold text-[#5a5a78] bg-white/3 border border-white/7"
+      className="w-1/3 rounded-6 py-3.5 text-sm font-medium text-[#e6bcbd] bg-transparent border border-white/10 hover:bg-white/5 transition-all"
     >
       {title}
     </button>

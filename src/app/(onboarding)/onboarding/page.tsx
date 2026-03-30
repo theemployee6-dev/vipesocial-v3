@@ -1,25 +1,40 @@
 "use client";
 
+// React
 import { useState } from "react";
+
+// Next.js
 import { useRouter } from "next/navigation";
+
+// React Hook Form
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+// Zod
 import { z } from "zod";
+
+// Third-party libraries
 import { toast } from "sonner";
+
+// Supabase client
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import GlowsEffectComponent from "@/shared/components/Glows/page";
-import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
-import OnboardingHeader from "../_components/OnboardingHeader/OnboardingHeader";
-import HeaderComponent from "@/shared/components/Header/page";
-import FieldInput from "@/shared/components/FieldInput/FieldInput";
-import MainButton from "@/shared/components/MainButton/page";
-import ProgressBar from "../_components/ProgressBar/ProgressBar";
-import BackButton from "../_components/BackButton/BackButton";
-import OnboardingMainButton from "../_components/OnboardingMainButton/OnboardingMainButton";
-import RadioButton from "../_components/RadioButton/RadioButton";
-import Label from "../_components/Label/Label";
+
+// Shared components (absolute imports from @/shared)
 import CardWrapper from "@/shared/components/CardWrapper/page";
+import FieldInput from "@/shared/components/FieldInput/FieldInput";
+import GlowsEffectComponent from "@/shared/components/Glows/page";
+import HeaderComponent from "@/shared/components/Header/page";
+import MainButton from "@/shared/components/MainButton/page";
+import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
+
+// Local components (relative imports from ../_components)
+import BackButton from "../_components/BackButton/BackButton";
 import CheckboxButton from "../_components/CheckboxButton/CheckboxButton";
+import Label from "../_components/Label/Label";
+import OnboardingHeader from "../_components/OnboardingHeader/OnboardingHeader";
+import OnboardingMainButton from "../_components/OnboardingMainButton/OnboardingMainButton";
+import ProgressBar from "../_components/ProgressBar/ProgressBar";
+import RadioButton from "../_components/RadioButton/RadioButton";
 
 // Schema de validação para cada etapa
 const step1Schema = z.object({

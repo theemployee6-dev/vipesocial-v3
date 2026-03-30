@@ -6,7 +6,7 @@ const OnboardingHeader = ({ currentStep }: { currentStep: number }) => {
       <section>
         <LogoComponent />
       </section>
-      <span className="text-xs text-[#3a3a55] font-dm-sans">
+      <span className="text-xs text-[#e6bcbd] font-dm-sans">
         Etapa {currentStep} de 4
       </span>
     </div>

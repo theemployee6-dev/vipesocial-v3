@@ -14,11 +14,12 @@ const OnboardingMainButton = ({
   return (
     <button
       type="submit"
+      disabled={disabled}
       className={clsx(
-        "flex-1 rounded-xl py-3.5 text-sm font-bold text-white bg-linear-to-br from-[#7c5cfc] via-[#6040e0] to-[#5030d0]",
+        "flex-1 rounded-6 py-3.5 text-sm font-bold text-white transition-all",
         disabled
-          ? "bg-gray-500 transition-all duration-500"
-          : "bg-linear-to-br from-[#7c5cfc] via-[#6040e0] to-[#5030d0]",
+          ? "bg-[#fe2c55]/50 cursor-not-allowed opacity-60"
+          : "bg-linear-to-b from-white/10 to-transparent bg-[#fe2c55] hover:brightness-110 active:scale-98 shadow-lg shadow-[#fe2c55]/10",
       )}
       onClick={onClick}
     >
