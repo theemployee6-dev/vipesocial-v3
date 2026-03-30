@@ -1,16 +1,15 @@
+// src/shared/components/FieldInput/FieldInput.tsx
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { clsx } from "clsx";
 
-type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
-type TextareaProps = Omit<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "type"
->;
+// Tipos suportados
+type InputType = "text" | "email" | "password" | "number" | "textarea";
 
+// Props do componente
 interface FieldInputProps {
   label?: string;
-  type?: "text" | "email" | "password" | "number" | "textarea";
+  type?: InputType;
   placeholder?: string;
   registration?: UseFormRegisterReturn;
   error?: string;
@@ -20,10 +19,10 @@ interface FieldInputProps {
   underlineClassName?: string;
   showPasswordHint?: boolean;
   containerClassName?: string;
+  // Aceita qualquer prop extra de input ou textarea, exceto 'type' e 'children'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
-
-// Unimos os atributos possíveis
-type CombinedProps = FieldInputProps & (InputProps | TextareaProps);
 
 export default function FieldInput({
   label,
@@ -38,7 +37,7 @@ export default function FieldInput({
   showPasswordHint = true,
   containerClassName = "",
   ...rest
-}: CombinedProps) {
+}: FieldInputProps) {
   const isPassword = type === "password";
   const isTextarea = type === "textarea";
 
@@ -65,8 +64,8 @@ export default function FieldInput({
             placeholder={placeholder}
             disabled={disabled}
             className={inputClassName}
-            {...(registration ? { ...registration } : {})}
-            {...(rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+            {...registration}
+            {...rest}
           />
         ) : (
           <input
@@ -74,13 +73,13 @@ export default function FieldInput({
             placeholder={placeholder}
             disabled={disabled}
             className={inputClassName}
-            {...(registration ? { ...registration } : {})}
-            {...(rest as React.InputHTMLAttributes<HTMLInputElement>)}
+            {...registration}
+            {...rest}
           />
         )}
         <div
           className={clsx(
-            "absolute bottom-0 left-0 h-[2] w-0 bg-[#fe2c55] transition-all duration-300 group-focus-within:w-full shadow-[0_0_8px_rgba(254,44,85,0.4)]",
+            "absolute bottom-0 left-0 h-2 w-0 bg-[#fe2c55] transition-all duration-300 group-focus-within:w-full shadow-[0_0_8px_rgba(254,44,85,0.4)]",
             underlineClassName,
           )}
         />
