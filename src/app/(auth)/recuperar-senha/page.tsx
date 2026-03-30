@@ -60,7 +60,7 @@ export default function RecuperarSenhaPage() {
 
       <div className="w-full max-w-[440] z-10">
         <CardWrapper showCornerGlow>
-          <BackLink href="/login" />
+          <BackLink href="/login" className="mb-4" />
           <LogoComponent className="mb-4" />
           <Pill className="mb-4">RECUPERAÇÃO DE SENHA</Pill>
 
