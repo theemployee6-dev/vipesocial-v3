@@ -308,7 +308,7 @@ export default function OnboardingPage() {
             <section>
               <FieldInput
                 label="Sua idade"
-                type="number"
+                type="text"
                 placeholder="25"
                 registration={form2.register("age", { valueAsNumber: true })}
                 error={form2.formState.errors.age?.message}
