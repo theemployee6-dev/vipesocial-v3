@@ -6,10 +6,9 @@ import { clsx } from "clsx";
 // Tipos suportados
 type InputType = "text" | "email" | "password" | "number" | "textarea";
 
-// Props do componente
-interface FieldInputProps {
+// Base comum
+interface BaseProps {
   label?: string;
-  type?: InputType;
   placeholder?: string;
   registration?: UseFormRegisterReturn;
   error?: string;
@@ -19,10 +18,22 @@ interface FieldInputProps {
   underlineClassName?: string;
   showPasswordHint?: boolean;
   containerClassName?: string;
-  // Aceita qualquer prop extra de input ou textarea, exceto 'type' e 'children'
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
 }
+
+// 👉 INPUT
+type InputProps = BaseProps &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & {
+    type?: Exclude<InputType, "textarea">;
+  };
+
+// 👉 TEXTAREA
+type TextareaProps = BaseProps &
+  Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "type"> & {
+    type: "textarea";
+  };
+
+// 👉 UNION FINAL
+type FieldInputProps = InputProps | TextareaProps;
 
 export default function FieldInput({
   label,
@@ -65,7 +76,7 @@ export default function FieldInput({
             disabled={disabled}
             className={inputClassName}
             {...registration}
-            {...rest}
+            {...(rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         ) : (
           <input
@@ -74,7 +85,7 @@ export default function FieldInput({
             disabled={disabled}
             className={inputClassName}
             {...registration}
-            {...rest}
+            {...(rest as React.InputHTMLAttributes<HTMLInputElement>)}
           />
         )}
         <div
