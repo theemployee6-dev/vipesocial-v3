@@ -98,7 +98,7 @@ export default function CadastroPage() {
         {/* Card principal */}
         <CardWrapper>
           {/* Botão voltar */}
-          <BackLink href="/login" />
+          <BackLink href="/login" className="mb-4" />
 
           {/* Logo (simplificada) */}
           <LogoComponent className="mb-4" />

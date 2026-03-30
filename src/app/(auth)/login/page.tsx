@@ -91,7 +91,7 @@ export default function LoginPage() {
 
       <div className="w-full max-w-[440] z-10">
         <CardWrapper showCornerGlow>
-          <BackLink href="/" />
+          <BackLink href="/" className="mb-4" />
           <LogoComponent className="mb-4" />
           <Pill className="mb-4">LOGIN</Pill>
 
