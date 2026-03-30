@@ -104,7 +104,7 @@ export default function CadastroPage() {
           <LogoComponent className="mb-4" />
 
           {/* Pill */}
-          <Pill className="mb-4">ACESSO VIP</Pill>
+          <Pill className="mb-4">CADASTRE-SE</Pill>
 
           <HeaderComponent
             title="Crie sua conta"

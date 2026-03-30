@@ -93,7 +93,7 @@ export default function LoginPage() {
         <CardWrapper showCornerGlow>
           <BackLink href="/" />
           <LogoComponent className="mb-4" />
-          <Pill className="mb-4">ACESSO VIP</Pill>
+          <Pill className="mb-4">LOGIN</Pill>
 
           <HeaderComponent
             title=" Acesse sua conta"
