@@ -8,7 +8,7 @@ import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
 import CardWrapper from "@/shared/components/CardWrapper/page";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
-import MainButton from "@/shared/components/MainButton/page";
+import MainButton from "@/shared/components/MainButton/MainButton";
 import { Pill } from "lucide-react";
 import BackLink from "../_shared/_components/BackLink/BackLink";
 import NoiseTexture from "../_shared/_components/NoiseTexture/NoiseTexture";

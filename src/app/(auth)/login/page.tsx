@@ -22,7 +22,7 @@ import FieldInput from "@/shared/components/FieldInput/FieldInput";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
 import HeaderComponent from "@/shared/components/Header/page";
 import LogoComponent from "@/shared/components/Logo/page";
-import MainButton from "@/shared/components/MainButton/page";
+import MainButton from "@/shared/components/MainButton/MainButton";
 
 // Shared components (caminho relativo _shared)
 import BackLink from "../_shared/_components/BackLink/BackLink";

@@ -24,7 +24,7 @@ import CardWrapper from "@/shared/components/CardWrapper/page";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
 import HeaderComponent from "@/shared/components/Header/page";
-import MainButton from "@/shared/components/MainButton/page";
+import MainButton from "@/shared/components/MainButton/MainButton";
 import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
 
 // Local components (relative imports from ../_components)
