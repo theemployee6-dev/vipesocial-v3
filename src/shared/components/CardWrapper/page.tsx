@@ -1,20 +1,22 @@
-import React from "react";
+interface CardWrapperProps {
+  children: React.ReactNode;
+  className?: string;
+  showCornerGlow?: boolean;
+}
 
-const CardWrapper = ({ children }: { children: React.ReactNode }) => {
+export default function CardWrapper({
+  children,
+  className = "",
+  showCornerGlow = true,
+}: CardWrapperProps) {
   return (
-    <>
-      {/* Card */}
-      <div
-        className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl px-5 py-8 sm:px-7 sm:py-9 md:px-9 md:py-10 border border-white/6"
-        style={{
-          background:
-            "linear-gradient(145deg, #0f0f1a 0%, #0c0c16 60%, #0a0a14 100%)",
-        }}
-      >
-        {children}
-      </div>
-    </>
+    <div
+      className={`bg-[#121212] rounded-xl p-8 md:p-10 shadow-2xl border border-white/5 relative overflow-hidden ${className}`}
+    >
+      {showCornerGlow && (
+        <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-[#fe2c55]/10 blur-xl to-transparent pointer-events-none" />
+      )}
+      {children}
+    </div>
   );
-};
-
-export default CardWrapper;
+}

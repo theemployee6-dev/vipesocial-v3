@@ -1,26 +1,26 @@
 import Link from "next/link";
 
-const TermFooterComponent = () => {
-  return (
-    <>
-      {/* Terms footer */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4 text-[10px] sm:text-[11px] text-[#1e1e2e] font-dm-sans">
-        <Link
-          href="/termos"
-          className="text-[#252535] no-underline hover:opacity-70"
-        >
-          Termos de uso
-        </Link>
-        <span style={{ color: "#151525" }}>|</span>
-        <Link
-          href="/privacidade"
-          className="text-[#252535] no-underline hover:opacity-70"
-        >
-          Privacidade
-        </Link>
-      </div>
-    </>
-  );
-};
+interface TermFooterProps {
+  className?: string;
+}
 
-export default TermFooterComponent;
+export default function TermFooter({ className = "" }: TermFooterProps) {
+  return (
+    <div
+      className={`flex justify-center gap-4 text-[#6b6b6b] text-[11px] ${className}`}
+    >
+      <Link href="/termos" className="hover:text-[#fe2c55] transition-colors">
+        Termos de Serviço
+      </Link>
+      <Link
+        href="/privacidade"
+        className="hover:text-[#fe2c55] transition-colors"
+      >
+        Política de Privacidade
+      </Link>
+      <Link href="/suporte" className="hover:text-[#fe2c55] transition-colors">
+        Suporte
+      </Link>
+    </div>
+  );
+}

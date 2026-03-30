@@ -1,17 +1,14 @@
-import React from "react";
+interface PillProps {
+  children: React.ReactNode;
+  className?: string;
+}
 
-const PillComponent = () => {
+export default function Pill({ children, className = "" }: PillProps) {
   return (
-    <>
-      {/* Pill */}
-      <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 mb-4 bg-[rgba(124,92,252,0.08)] border border-[rgba(124,92,252,0.15)]">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#7c5cfc]" />
-        <span className="text-[10px] sm:text-xs text-[#6a50c0] font-dm-sans">
-          IA para criadores TikTok
-        </span>
-      </div>
-    </>
+    <div
+      className={`inline-block bg-[#fe2c55]/10 text-[#fe2c55] text-xs font-medium px-3 py-1 rounded-full uppercase tracking-wide ${className}`}
+    >
+      {children}
+    </div>
   );
-};
-
-export default PillComponent;
+}

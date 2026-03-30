@@ -1,48 +1,48 @@
 @import "tailwindcss";
 
 /* ============================================
-   DESIGN SYSTEM — vipeSocial
-   Todas as variáveis de cor e tipografia
-   da plataforma ficam aqui centralizadas.
-   Mudar aqui reflete em toda a aplicação.
+   DESIGN SYSTEM — vipeSocial (TikTok Style)
+   Baseado na identidade visual das páginas públicas
+   Adaptado para manter Syne e DM Sans.
    ============================================ */
 
 :root {
-  /* Cores base */
-  --vs-bg-root: #080810;
-  --vs-bg-card: #0f0f1a;
-  --vs-bg-input: rgba(255, 255, 255, 0.03);
+  /* Cores base (TikTok) */
+  --vs-bg-root: #000000; /* fundo primário */
+  --vs-bg-card: #121212; /* cards, containers */
+  --vs-bg-input: #1f1f1f; /* inputs, hover */
   --vs-bg-button-secondary: rgba(255, 255, 255, 0.03);
 
-  /* Cor primária — roxo vipeSocial */
-  --vs-primary: #7c5cfc;
-  --vs-primary-dark: #5a3de0;
-  --vs-primary-darker: #5030d0;
-  --vs-primary-muted: rgba(124, 92, 252, 0.08);
-  --vs-primary-border: rgba(124, 92, 252, 0.15);
-  --vs-primary-glow: rgba(124, 92, 252, 0.18);
+  /* Cor primária — TikTok rosa */
+  --vs-primary: #fe2c55;
+  --vs-primary-dark: #e01a42;
+  --vs-primary-darker: #c01336;
+  --vs-primary-muted: rgba(254, 44, 85, 0.08);
+  --vs-primary-border: rgba(254, 44, 85, 0.15);
+  --vs-primary-glow: rgba(254, 44, 85, 0.18);
 
-  /* Cor âmbar — acento quente */
-  --vs-amber: #c88c28;
-  --vs-amber-glow: rgba(200, 140, 40, 0.12);
+  /* Cor secundária — tom mais claro para destaques suaves */
+  --vs-secondary: #ffb3b6;
 
-  /* Cor azul — acento frio */
+  /* Acentos opcionais */
+  --vs-amber: #f9a825; /* mantido para possíveis usos, mas não primário */
+  --vs-amber-glow: rgba(249, 168, 37, 0.12);
   --vs-blue-glow: rgba(80, 120, 255, 0.1);
 
   /* Bordas */
-  --vs-border-subtle: rgba(255, 255, 255, 0.06);
-  --vs-border-input: rgba(255, 255, 255, 0.07);
-  --vs-border-input-focus: rgba(124, 92, 252, 0.4);
+  --vs-border-subtle: rgba(255, 255, 255, 0.05);
+  --vs-border-input: rgba(255, 255, 255, 0.1);
+  --vs-border-input-focus: #fe2c55;
 
   /* Texto */
-  --vs-text-primary: #e8e8f8;
-  --vs-text-secondary: #3a3a55;
-  --vs-text-muted: #5a5a78;
-  --vs-text-placeholder: #252535;
-  --vs-text-label: #5a5a78;
-  --vs-text-dimmed: #3a3a52;
+  --vs-text-primary: #ffffff;
+  --vs-text-secondary: #e6bcbd; /* on-surface-variant */
+  --vs-text-muted: #a8a8a8;
+  --vs-text-placeholder: #555;
+  --vs-text-label: #a8a8a8;
+  --vs-text-dimmed: #6b6b6b;
 
-  /* Fontes */
+  /* Fontes (mantidas as originais) */
   --font-display: var(--font-syne);
   --font-body: var(--font-dm-sans);
 }
@@ -93,4 +93,53 @@ button:focus {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #2e2e4e;
+}
+
+/* ============================================
+   Botão primário (estilo TikTok)
+   Use a classe .btn-primary
+   ============================================ */
+.btn-primary {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    var(--vs-primary);
+  color: white;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 12px 20px;
+  transition: all 150ms ease-out;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: scale(0.98);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* Botão secundário */
+.btn-secondary {
+  background: var(--vs-bg-button-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--vs-text-primary);
+  border-radius: 6px;
+  padding: 12px 20px;
+  transition: all 150ms ease-out;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.07);
 }

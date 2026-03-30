@@ -1,36 +1,45 @@
 "use client";
 
-// Componentes visuais compartilhados (layout/estrutura)
-import BackLinkComponent from "../_shared/_components/BackLink/BackLink";
-import CardWrapper from "@/shared/components/CardWrapper/page";
-import DividerComponent from "../_shared/_components/Divider/Divider";
-import FooterComponent from "../_shared/_components/Footer/Footer";
+// React
+import { useState } from "react";
 
-import NoiseTextureComponent from "../_shared/_components/NoiseTexture/NoiseTexture";
-import PillComponent from "../_shared/_components/Pill/Pill";
-import ProofStatsComponent from "../_shared/_components/ProofStats/ProofStats";
-import TermFooterComponent from "../_shared/_components/TermFooter/TermFooter";
-import TopGlowLineComponent from "../../../shared/components/TopGlowLine/page";
+// React Hook Form
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Third-party libraries
+import { toast } from "sonner";
+
+// Internal hooks
+import { useAuth } from "@/shared/hooks/useAuth";
+
+// Internal utils
+import { LoginFormData, loginSchema } from "@/shared/utils/validations";
+
+// Shared components (caminho @/shared)
+import CardWrapper from "@/shared/components/CardWrapper/page";
+import FieldInput from "@/shared/components/FieldInput/FieldInput";
 import GlowsEffectComponent from "@/shared/components/Glows/page";
 import HeaderComponent from "@/shared/components/Header/page";
 import LogoComponent from "@/shared/components/Logo/page";
 import MainButton from "@/shared/components/MainButton/page";
 
-// Componentes de formulário (também compartilhados, mas com propósito específico)
-import { useState } from "react";
-import { useAuth } from "@/shared/hooks/useAuth";
-import FieldInput from "../../../shared/components/FieldInput/FieldInput";
-import GoogleButtonComponent from "../_shared/_components/GoogleButton/GoogleButton";
+// Shared components (caminho relativo _shared)
+import BackLink from "../_shared/_components/BackLink/BackLink";
+import Divider from "../_shared/_components/Divider/Divider";
+import FooterComponent from "../_shared/_components/Footer/Footer";
+import GoogleButton from "../_shared/_components/GoogleButton/GoogleButton";
+import NoiseTexture from "../_shared/_components/NoiseTexture/NoiseTexture";
+import ProofStats from "../_shared/_components/ProofStats/ProofStats";
+import TermFooter from "../_shared/_components/TermFooter/TermFooter";
 
-// Componentes específicos desta página (não reutilizados em outras rotas)
+// Local components
 import RememberAndForgotComponent from "./_components/RememberForgot/RememberForgot";
-import { useForm } from "react-hook-form";
-import { LoginFormData, loginSchema } from "@/shared/utils/validations";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import Pill from "../_shared/_components/Pill/Pill";
 
 export default function LoginPage() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const { login, loginComGoogle } = useAuth();
 
   const {
     register,
@@ -40,8 +49,6 @@ export default function LoginPage() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
-
-  const { login, loginComGoogle } = useAuth();
 
   async function onSubmit(data: LoginFormData) {
     setLoading(true);
@@ -57,9 +64,8 @@ export default function LoginPage() {
       }
 
       reset();
-      toast.success("Login com Sucesso!");
+      toast.success("Login com sucesso!");
     } catch {
-      // Erro inesperado — rede caiu, servidor fora do ar, etc.
       toast.error("Algo deu errado. Tente novamente.");
     } finally {
       setLoading(false);
@@ -79,92 +85,71 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#080810] px-[2%] py-[20%] sm:px-[4%] sm:py-[25%] md:py-[20%] lg:py-[15%]">
-      {/* GlowEffect */}
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#000000] px-4 py-12">
       <GlowsEffectComponent />
+      <NoiseTexture />
 
-      {/* Noise texture */}
-      <NoiseTextureComponent />
+      <div className="w-full max-w-[440] z-10">
+        <CardWrapper showCornerGlow>
+          <BackLink href="/" />
+          <LogoComponent />
+          <Pill className="mb-4">ACESSO VIP</Pill>
 
-      {/* Back link */}
-      <BackLinkComponent href="/" />
+          <HeaderComponent
+            title=" Acesse sua conta"
+            subTitle=" Bem-vindo de volta. Vamos viralizar."
+          />
 
-      {/* Card */}
-      <CardWrapper>
-        {/* Top glow line */}
-        <TopGlowLineComponent />
-
-        {/* Logo */}
-        <LogoComponent className="max-w-[clamp(180px,15vw,200px)] md:max-w-[clamp(180px,12vw,280px)] lg:max-w-[clamp(220px,10vw,350px)] mb-5" />
-
-        {/* Pill */}
-        <PillComponent />
-
-        {/* Heading */}
-        <HeaderComponent
-          title="Acesse sua conta"
-          subTitle="Bem-vindo de volta. Vamos viralizar."
-        />
-
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          {/* Email */}
-          <section className="mb-3.5">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
             <FieldInput
-              label="Email"
+              label="E-mail"
               type="email"
               placeholder="seu@email.com"
               registration={register("email")}
               error={errors.email?.message}
               disabled={loading}
             />
-          </section>
+            <div>
+              <FieldInput
+                label="Senha"
+                type="password"
+                placeholder="••••••••"
+                registration={register("password")}
+                error={errors.password?.message}
+                disabled={loading}
+              />
+            </div>
 
-          {/* Senha */}
-          <section className="mb-3.5">
-            <FieldInput
-              label="Senha"
-              type="password"
-              placeholder="••••••••"
-              registration={register("password")}
-              error={errors.password?.message}
+            <RememberAndForgotComponent />
+
+            <MainButton
+              title={loading ? "Carregando..." : "Entrar"}
               disabled={loading}
+              type="submit"
             />
-          </section>
+          </form>
 
-          {/* Row: remember + forgot */}
-          <RememberAndForgotComponent />
+          <Divider />
 
-          {/* Button wrapper */}
-          <MainButton
-            title={loading ? "Carregando..." : "Entrar"}
-            disabled={loading}
-          />
-
-          {/* Divider */}
-          <DividerComponent />
-
-          {/* Google button */}
-          <GoogleButtonComponent
-            title="Entrar com o Google"
+          <GoogleButton
+            title="Entrar com Google"
             onClick={handleGoogle}
             disabled={loading}
           />
-        </form>
 
-        {/* Footer */}
-        <FooterComponent
-          href="/cadastro"
-          title="Não tem conta?"
-          titleLink="Criar conta grátis"
-        />
-      </CardWrapper>
+          <FooterComponent
+            href="/cadastro"
+            title="Não tem conta?"
+            titleLink="Criar conta grátis"
+          />
+        </CardWrapper>
 
-      {/* Proof stats */}
-      <ProofStatsComponent />
-
-      {/* Terms footer */}
-      <TermFooterComponent />
+        <ProofStats className="mt-6" />
+        <TermFooter className="mt-4" />
+      </div>
     </div>
   );
 }

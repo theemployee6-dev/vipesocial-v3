@@ -11,14 +11,15 @@ const LogoComponent = ({ className, priority = false }: LogoComponentProps) => {
     <div
       className={clsx(
         "flex items-center w-full",
-        "max-w-[clamp(120px,20vw,280px)]", // valor padrão
-        className, // permite sobrescrever
+        "max-w-[clamp(150px,12vw,240px)]", // valor padrão
+        className,
       )}
     >
       <Image
-        src="/assets/img/logo/logo_novo_roxo.png"
+        src="/assets/img/logo/logo_transparent.png"
         alt="VipeSocial Logo"
-        width={250}
+        loading="eager"
+        width={200}
         height={28}
         sizes="20vw"
         className="w-full h-auto"

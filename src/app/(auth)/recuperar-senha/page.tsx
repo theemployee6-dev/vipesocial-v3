@@ -5,15 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import BackLinkComponent from "../_shared/_components/BackLink/BackLink";
-
+import GlowsEffectComponent from "@/shared/components/Glows/page";
 import CardWrapper from "@/shared/components/CardWrapper/page";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
-import GlowsEffectComponent from "@/shared/components/Glows/page";
-import HeaderComponent from "@/shared/components/Header/page";
-import LogoComponent from "@/shared/components/Logo/page";
 import MainButton from "@/shared/components/MainButton/page";
-import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
+import { Pill } from "lucide-react";
+import BackLink from "../_shared/_components/BackLink/BackLink";
+import NoiseTexture from "../_shared/_components/NoiseTexture/NoiseTexture";
+import LogoComponent from "@/shared/components/Logo/page";
+import HeaderComponent from "@/shared/components/Header/page";
 
 const schema = z.object({
   email: z
@@ -39,9 +39,6 @@ export default function RecuperarSenhaPage() {
       const supabase = createClientSupabaseClient();
 
       const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        // Após o usuário clicar no link do email,
-        // ele será redirecionado para essa rota
-        // onde pode digitar a nova senha.
         redirectTo: `${window.location.origin}/auth/callback?next=/nova-senha`,
       });
 
@@ -57,48 +54,44 @@ export default function RecuperarSenhaPage() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#080810] px-4 py-8">
-      {/* Glow */}
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#000000] px-4 py-12">
       <GlowsEffectComponent />
+      <NoiseTexture />
 
-      {/* Back link */}
-      <BackLinkComponent href="/login" />
+      <div className="w-full max-w-[440] z-10">
+        <CardWrapper showCornerGlow>
+          <BackLink href="/login" />
+          <LogoComponent />
+          <Pill className="mb-4">RECUPERAÇÃO DE SENHA</Pill>
 
-      {/* Card */}
-      <CardWrapper>
-        {/* Top glow line */}
-        <TopGlowLineComponent />
-
-        {/* Logo */}
-        <LogoComponent className="max-w-[clamp(180px,15vw,200px)] md:max-w-[clamp(180px,12vw,280px)] lg:max-w-[clamp(220px,10vw,350px)] mb-5" />
-
-        {/* Heading */}
-        <section>
           <HeaderComponent
             title="Recuperar senha"
-            subTitle=" Digite seu email e enviaremos um link para redefinir sua senha."
-          />
-        </section>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          {/* Email */}
-          <FieldInput
-            label="Email"
-            type="email"
-            placeholder="seu@email.com"
-            registration={register("email")}
-            error={errors.email?.message}
+            subTitle="Digite seu email e enviaremos um link para redefinir sua senha."
           />
 
-          {/* Botão */}
-          <div className="relative mt-2">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
+            <FieldInput
+              label="E-mail"
+              type="email"
+              placeholder="seu@email.com"
+              registration={register("email")}
+              error={errors.email?.message}
+              disabled={isSubmitting}
+            />
+
             <MainButton
               title={
-                isSubmitting ? "Enviando..." : "Enviar link de recuperação →"
+                isSubmitting ? "Enviando..." : "Enviar link de recuperação"
               }
+              type="submit"
+              disabled={isSubmitting}
             />
-          </div>
-        </form>
-      </CardWrapper>
+          </form>
+        </CardWrapper>
+      </div>
     </div>
   );
 }

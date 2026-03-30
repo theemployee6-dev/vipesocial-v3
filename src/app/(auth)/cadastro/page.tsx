@@ -1,39 +1,43 @@
 "use client";
 
-// Componentes de fundo e estrutura
-import BackLinkComponent from "../_shared/_components/BackLink/BackLink";
-import CardWrapper from "@/shared/components/CardWrapper/page";
-import GlowsEffectComponent from "@/shared/components/Glows/page";
-import NoiseTextureComponent from "../_shared/_components/NoiseTexture/NoiseTexture";
+// React
+import { useState } from "react";
 
-// Componentes de UI e conteúdo
-import DividerComponent from "../_shared/_components/Divider/Divider";
-import FooterComponent from "../_shared/_components/Footer/Footer";
-import GoogleButtonComponent from "../_shared/_components/GoogleButton/GoogleButton";
+// React Hook Form
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Third‑party libraries
+import { toast } from "sonner";
+
+// Internal hooks
+import { useAuth } from "@/shared/hooks/useAuth";
+
+// Internal utils (types & schemas)
+import { CadastroFormData, cadastroSchema } from "@/shared/utils/validations";
+
+// Shared components (absolute imports)
+import CardWrapper from "@/shared/components/CardWrapper/page";
+import FieldInput from "@/shared/components/FieldInput/FieldInput";
+import GlowsEffectComponent from "@/shared/components/Glows/page";
 import HeaderComponent from "@/shared/components/Header/page";
 import LogoComponent from "@/shared/components/Logo/page";
 import MainButton from "@/shared/components/MainButton/page";
-import PillComponent from "../_shared/_components/Pill/Pill";
-import ProofStatsComponent from "../_shared/_components/ProofStats/ProofStats";
-import TermFooterComponent from "../_shared/_components/TermFooter/TermFooter";
-import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
 
-// Componentes de formulário
-import FieldInput from "../../../shared/components/FieldInput/FieldInput";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CadastroFormData, cadastroSchema } from "@/shared/utils/validations";
-
-import { useAuth } from "@/shared/hooks/useAuth";
-import { toast } from "sonner";
-import { useState } from "react";
+// Shared components (relative imports – _shared folder)
+import BackLink from "../_shared/_components/BackLink/BackLink";
+import Divider from "../_shared/_components/Divider/Divider";
+import FooterComponent from "../_shared/_components/Footer/Footer";
+import GoogleButton from "../_shared/_components/GoogleButton/GoogleButton";
+import NoiseTexture from "../_shared/_components/NoiseTexture/NoiseTexture";
+import Pill from "../_shared/_components/Pill/Pill";
+import ProofStats from "../_shared/_components/ProofStats/ProofStats";
+import TermFooter from "../_shared/_components/TermFooter/TermFooter";
 
 export default function CadastroPage() {
-  // Inicializa o formulário com o schema do Zod como validador.
-  // O TypeScript já sabe exatamente quais campos existem
-  // e quais tipos eles têm graças ao CadastroFormData.
+  const [loading, setLoading] = useState(false);
+  const { cadastrar, loginComGoogle } = useAuth();
 
-  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -41,14 +45,13 @@ export default function CadastroPage() {
     formState: { errors },
   } = useForm<CadastroFormData>({
     resolver: zodResolver(cadastroSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
-
-  // Essa função só é chamada se todos os campos
-  // passarem na validação do Zod.
-  // Por enquanto só vamos logar os dados —
-  // a lógica do Supabase vem no próximo passo.
-
-  const { loginComGoogle, cadastrar } = useAuth();
 
   async function onSubmit(data: CadastroFormData) {
     setLoading(true);
@@ -59,16 +62,14 @@ export default function CadastroPage() {
         password: data.password,
       });
 
-      // Se retornou erro, mostra na tela.
       if (resultado?.error) {
         toast.error(resultado.error);
         return;
       }
 
       reset();
-      toast.success("Login com Sucesso!");
+      toast.success("Conta criada com sucesso! Verifique seu e-mail.");
     } catch {
-      // Erro inesperado — rede caiu, servidor fora do ar, etc.
       toast.error("Algo deu errado. Tente novamente.");
     } finally {
       setLoading(false);
@@ -88,113 +89,104 @@ export default function CadastroPage() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#080810] px-[2%] py-[20%] sm:px-[4%] sm:py-[25%] md:py-[20%] lg:py-[15%]">
-      {/* Glows — mesmos do login para consistência visual */}
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#000000] px-4 py-12">
+      {/* Efeitos visuais */}
       <GlowsEffectComponent />
+      <NoiseTexture />
 
-      {/* Noise texture */}
-      <NoiseTextureComponent />
+      <div className="w-full max-w-[440] z-10">
+        {/* Card principal */}
+        <CardWrapper>
+          {/* Botão voltar */}
+          <BackLink href="/login" />
 
-      {/* Back link */}
-      <BackLinkComponent href="/" />
+          {/* Logo (simplificada) */}
+          <LogoComponent />
 
-      {/* Card */}
-      <CardWrapper>
-        {/* Top glow line */}
-        <TopGlowLineComponent />
+          {/* Pill */}
+          <Pill className="mb-4">ACESSO VIP</Pill>
 
-        {/* Logo */}
-        <LogoComponent className="max-w-[clamp(180px,15vw,200px)] md:max-w-[clamp(180px,12vw,280px)] lg:max-w-[clamp(220px,10vw,350px)] mb-5" />
+          <HeaderComponent
+            title="Crie sua conta"
+            subTitle="Comece grátis. Sem cartão de crédito."
+          />
 
-        {/* Pill */}
-        <PillComponent />
-
-        {/* Heading */}
-        <HeaderComponent
-          title=" Crie sua conta"
-          subTitle="  Comece grátis. Sem cartão de crédito."
-        />
-
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          {/* Nome completo */}
-          <section>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
+            {/* Nome completo */}
             <FieldInput
-              label="Nome Completo"
+              label="Nome completo"
               type="text"
               placeholder="Digite seu nome"
               registration={register("fullName")}
               error={errors.fullName?.message}
               disabled={loading}
             />
-          </section>
 
-          {/* Email */}
-          <section>
+            {/* E-mail */}
             <FieldInput
-              label="Email"
+              label="E-mail"
               type="email"
               placeholder="seu@email.com"
               registration={register("email")}
               error={errors.email?.message}
               disabled={loading}
             />
-          </section>
 
-          {/* Senha */}
-          <section>
-            <FieldInput
-              label="Senha"
-              type="password"
-              placeholder="••••••••"
-              registration={register("password")}
-              error={errors.password?.message}
+            {/* Senha e Confirmar senha */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FieldInput
+                label="Senha"
+                type="password"
+                placeholder="••••••••"
+                registration={register("password")}
+                error={errors.password?.message}
+                disabled={loading}
+              />
+              <FieldInput
+                label="Confirmar senha"
+                type="password"
+                placeholder="••••••••"
+                registration={register("confirmPassword")}
+                error={errors.confirmPassword?.message}
+                disabled={loading}
+              />
+            </div>
+
+            {/* Botão principal */}
+            <MainButton
+              title={loading ? "Criando conta..." : "Criar minha conta →"}
+              type="submit"
               disabled={loading}
+              className="mt-2"
             />
-          </section>
+          </form>
 
-          {/* Confirmar senha */}
-          <section className="mb-2">
-            <FieldInput
-              label="Confirmar senha"
-              type="password"
-              placeholder="••••••••"
-              registration={register("confirmPassword")}
-              error={errors.confirmPassword?.message}
-              disabled={loading}
-            />
-          </section>
+          <Divider />
 
-          {/* Botão principal */}
-          <MainButton
-            title={loading ? "Carregando..." : "Criar minha conta →"}
-            disabled={loading}
-          />
-
-          {/* Divider */}
-          <DividerComponent />
-
-          {/* Google button */}
-          <GoogleButtonComponent
-            title="Entrar com o Google"
+          {/* Botão Google */}
+          <GoogleButton
+            title="Entrar com Google"
             onClick={handleGoogle}
             disabled={loading}
           />
-        </form>
 
-        {/* Footer */}
-        <FooterComponent
-          href="/login"
-          title="Já tem conta?"
-          titleLink=" Entrar"
-        />
-      </CardWrapper>
+          {/* Footer (já tem conta?) */}
+          <FooterComponent
+            href="/login"
+            title="Já tem conta?"
+            titleLink="Entrar"
+          />
+        </CardWrapper>
 
-      {/* Proof stats */}
-      <ProofStatsComponent />
+        {/* Proof Stats (estatística de sucesso) */}
+        <ProofStats className="mt-6" />
 
-      {/* Terms footer */}
-      <TermFooterComponent />
+        {/* Term Footer (links legais) */}
+        <TermFooter className="mt-4" />
+      </div>
     </div>
   );
 }
