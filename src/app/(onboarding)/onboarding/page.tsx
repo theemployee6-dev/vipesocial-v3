@@ -302,7 +302,7 @@ export default function OnboardingPage() {
             </section>
 
             <section className="mt-5">
-              <MainButton title="Continuar →" />
+              <MainButton title="Continuar →" type="submit" />
             </section>
           </form>
         )}
