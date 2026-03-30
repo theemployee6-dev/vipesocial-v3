@@ -160,7 +160,6 @@ export default function CadastroPage() {
               title={loading ? "Criando conta..." : "Criar minha conta →"}
               type="submit"
               disabled={loading}
-              className="mt-2"
             />
           </form>
 
