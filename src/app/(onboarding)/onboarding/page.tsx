@@ -20,12 +20,12 @@ import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 
 // Shared components (absolute imports from @/shared)
-import CardWrapper from "@/shared/components/CardWrapper/page";
+import CardWrapper from "@/shared/components/CardWrapper/CardWrapper";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
-import GlowsEffectComponent from "@/shared/components/Glows/page";
-import HeaderComponent from "@/shared/components/Header/page";
+import GlowsEffectComponent from "@/shared/components/GlowsEffectComponent/GlowsEffectComponent";
+import HeaderComponent from "@/shared/components/HeaderComponent/HeaderComponent";
 import MainButton from "@/shared/components/MainButton/MainButton";
-import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
+import TopGlowLineComponent from "@/shared/components/TopGlowLineComponent/TopGlowLineComponent";
 
 // Local components (relative imports from ../_components)
 import BackButton from "../_components/BackButton/BackButton";

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import LogoComponent from "@/shared/components/Logo/page";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 
 interface Script {
   id: string;

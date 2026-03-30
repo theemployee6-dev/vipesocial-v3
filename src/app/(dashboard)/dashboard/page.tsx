@@ -23,7 +23,7 @@ import {
   Menu,
 } from "lucide-react";
 import clsx from "clsx";
-import LogoComponent from "@/shared/components/Logo/page";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 import { getGreeting } from "@/shared/utils/time";
 import { toast } from "sonner";
 

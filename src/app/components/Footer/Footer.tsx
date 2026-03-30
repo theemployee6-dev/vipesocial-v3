@@ -1,4 +1,4 @@
-import LogoComponent from "@/shared/components/Logo/page";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 import Link from "next/link";
 
 export default function Footer() {

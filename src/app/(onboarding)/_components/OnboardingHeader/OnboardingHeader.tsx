@@ -1,4 +1,4 @@
-import LogoComponent from "@/shared/components/Logo/page";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 
 const OnboardingHeader = ({ currentStep }: { currentStep: number }) => {
   return (

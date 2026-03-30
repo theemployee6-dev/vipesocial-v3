@@ -5,15 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import GlowsEffectComponent from "@/shared/components/Glows/page";
-import CardWrapper from "@/shared/components/CardWrapper/page";
+import GlowsEffectComponent from "@/shared/components/GlowsEffectComponent/GlowsEffectComponent";
+import CardWrapper from "@/shared/components/CardWrapper/CardWrapper";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
 import MainButton from "@/shared/components/MainButton/MainButton";
 import { Pill } from "lucide-react";
 import BackLink from "../_shared/_components/BackLink/BackLink";
 import NoiseTexture from "../_shared/_components/NoiseTexture/NoiseTexture";
-import LogoComponent from "@/shared/components/Logo/page";
-import HeaderComponent from "@/shared/components/Header/page";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
+import HeaderComponent from "@/shared/components/HeaderComponent/HeaderComponent";
 
 const schema = z.object({
   email: z

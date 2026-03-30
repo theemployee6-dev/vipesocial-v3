@@ -1,7 +1,7 @@
 import Link from "next/link";
-import TopGlowLineComponent from "@/shared/components/TopGlowLine/page";
-import LogoComponent from "@/shared/components/Logo/page";
-import HeaderComponent from "@/shared/components/Header/page";
+import TopGlowLineComponent from "@/shared/components/TopGlowLineComponent/TopGlowLineComponent";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
+import HeaderComponent from "@/shared/components/HeaderComponent/HeaderComponent";
 
 export default function ConfirmarEmailPage() {
   return (

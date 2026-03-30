@@ -17,11 +17,11 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { LoginFormData, loginSchema } from "@/shared/utils/validations";
 
 // Shared components (caminho @/shared)
-import CardWrapper from "@/shared/components/CardWrapper/page";
+import CardWrapper from "@/shared/components/CardWrapper/CardWrapper";
 import FieldInput from "@/shared/components/FieldInput/FieldInput";
-import GlowsEffectComponent from "@/shared/components/Glows/page";
-import HeaderComponent from "@/shared/components/Header/page";
-import LogoComponent from "@/shared/components/Logo/page";
+import GlowsEffectComponent from "@/shared/components/GlowsEffectComponent/GlowsEffectComponent";
+import HeaderComponent from "@/shared/components/HeaderComponent/HeaderComponent";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 import MainButton from "@/shared/components/MainButton/MainButton";
 
 // Shared components (caminho relativo _shared)
