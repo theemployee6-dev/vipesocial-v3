@@ -1,11 +1,11 @@
-import DifferentiatorSection from "./_components/DifferentiatorSection/DifferentiatorSection";
-import FinalCTA from "./_components/FinalCTA/FinalCTA";
-import Footer from "./_components/Footer/Footer";
-import Hero from "./_components/Hero/Hero";
-import HowItWorks from "./_components/HowItWorks/HowItWorks";
-import Navbar from "./_components/Navbar/Navbar";
-import PricingSection from "./_components/PricingSection/PricingSection";
-import ProblemSection from "./_components/ProblemSection/ProblemSection";
+import DifferentiatorSection from "./_componentsLandingPage/DifferentiatorSection/DifferentiatorSection";
+import FinalCTA from "./_componentsLandingPage/FinalCTA/FinalCTA";
+import Footer from "./_componentsLandingPage/Footer/Footer";
+import Hero from "./_componentsLandingPage/Hero/Hero";
+import HowItWorks from "./_componentsLandingPage/HowItWorks/HowItWorks";
+import Navbar from "./_componentsLandingPage/Navbar/Navbar";
+import PricingSection from "./_componentsLandingPage/PricingSection/PricingSection";
+import ProblemSection from "./_componentsLandingPage/ProblemSection/ProblemSection";
 
 export default function LandingPage() {
   return (
