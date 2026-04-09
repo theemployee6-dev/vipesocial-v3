@@ -9,7 +9,12 @@ import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import { VideoUploader } from "@/shared/components/VideoUploader/VideoUploader";
 
-// Schema de validação das métricas
+// ─── Design Tokens — Cinematic Intelligence ───────────────────────────────────
+// bg: #131313 | card-1: #1C1B1B | card-2: #201F1F
+// accent: #FE2C55 | text-secondary: #E6BCBD | text-muted: #5A5A5A
+// border: rgba(255,255,255,0.06) | input-bg: rgba(255,255,255,0.04)
+// ─────────────────────────────────────────────────────────────────────────────
+
 const metricasSchema = z.object({
   views: z
     .number({ error: "Digite o número de views" })
@@ -30,6 +35,115 @@ const metricasSchema = z.object({
 
 type MetricasFormData = z.infer<typeof metricasSchema>;
 
+// ─── MetricInput ──────────────────────────────────────────────────────────────
+
+function MetricInput({
+  emoji,
+  label,
+  error,
+  inputProps,
+}: {
+  emoji: string;
+  label: string;
+  error?: string;
+  inputProps: React.InputHTMLAttributes<HTMLInputElement>;
+}) {
+  const [focused, setFocused] = useState(false);
+
+  return (
+    <div>
+      <label
+        className="block font-dm-sans text-xs font-medium mb-1.5 truncate"
+        style={{ color: "#5A5A5A" }}
+      >
+        {emoji} {label}
+      </label>
+      <input
+        type="number"
+        min="0"
+        {...inputProps}
+        onFocus={(e) => {
+          setFocused(true);
+          inputProps.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setFocused(false);
+          inputProps.onBlur?.(e);
+        }}
+        className="w-full rounded-xl px-3 py-2.5 text-sm font-dm-sans outline-none transition-all"
+        style={{
+          background: "rgba(255,255,255,0.04)",
+          border: focused
+            ? "1px solid rgba(254,44,85,0.5)"
+            : "1px solid rgba(255,255,255,0.07)",
+          color: "#FFFFFF",
+          boxShadow: focused ? "0 0 0 3px rgba(254,44,85,0.08)" : "none",
+        }}
+      />
+      {error && (
+        <p
+          className="text-[10px] mt-1 font-dm-sans"
+          style={{ color: "#E6BCBD" }}
+        >
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── SectionCard ──────────────────────────────────────────────────────────────
+
+function SectionCard({
+  step,
+  title,
+  description,
+  children,
+}: {
+  step: string;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="rounded-2xl p-6 sm:p-8"
+      style={{ background: "#1C1B1B" }}
+    >
+      {/* Step badge */}
+      <div className="flex items-center gap-2.5 mb-4">
+        <div
+          className="w-6 h-6 rounded-lg flex items-center justify-center font-syne text-xs font-bold shrink-0"
+          style={{
+            background: "rgba(254,44,85,0.12)",
+            color: "#FE2C55",
+          }}
+        >
+          {step}
+        </div>
+        <div>
+          <h2
+            className="font-syne text-base font-semibold leading-tight"
+            style={{ color: "#FFFFFF" }}
+          >
+            {title}
+          </h2>
+          <p
+            className="font-dm-sans text-xs mt-0.5"
+            style={{ color: "#5A5A5A" }}
+          >
+            {description}
+          </p>
+        </div>
+      </div>
+
+      {children}
+    </div>
+  );
+}
+
+// ─── Página ───────────────────────────────────────────────────────────────────
+
 export default function NovaAnalisePage() {
   const router = useRouter();
   const supabase = createClientSupabaseClient();
@@ -48,13 +162,7 @@ export default function NovaAnalisePage() {
     formState: { errors },
   } = useForm<MetricasFormData>({
     resolver: zodResolver(metricasSchema),
-    defaultValues: {
-      views: 0,
-      likes: 0,
-      comments: 0,
-      shares: 0,
-      saves: 0,
-    },
+    defaultValues: { views: 0, likes: 0, comments: 0, shares: 0, saves: 0 },
   });
 
   async function onSubmit(metricas: MetricasFormData) {
@@ -153,15 +261,30 @@ export default function NovaAnalisePage() {
     }
   }
 
+  const metrics = [
+    { key: "views", emoji: "👁", label: "Visualizações" },
+    { key: "likes", emoji: "❤️", label: "Curtidas" },
+    { key: "comments", emoji: "💬", label: "Comentários" },
+    { key: "shares", emoji: "🔁", label: "Compartilhamentos" },
+    { key: "saves", emoji: "🔖", label: "Salvamentos" },
+  ] as const;
+
   return (
-    <div className="min-h-screen bg-[#080810] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12">
-      {/* Container principal com largura máxima responsiva */}
+    <div
+      className="min-h-screen px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12"
+      style={{ background: "#131313" }}
+    >
       <div className="max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 sm:mb-8 md:mb-10">
+
+        {/* ── Header ──────────────────────────────────────────────── */}
+        <div className="mb-8 sm:mb-10">
+          {/* Back */}
           <button
             onClick={() => router.push("/dashboard")}
-            className="flex items-center gap-1.5 text-xs sm:text-sm text-[#3a3a50] hover:text-[#6a6a90] transition-colors font-dm-sans mb-4 sm:mb-6"
+            className="flex items-center gap-1.5 text-xs font-dm-sans mb-6 transition-colors"
+            style={{ color: "#5A5A5A" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#E6BCBD")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#5A5A5A")}
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path
@@ -175,170 +298,171 @@ export default function NovaAnalisePage() {
             Voltar
           </button>
 
-          <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 mb-4 bg-[rgba(124,92,252,0.08)] border border-[rgba(124,92,252,0.15)]">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#7c5cfc]" />
-            <span className="text-[10px] sm:text-xs text-[#6a50c0] font-dm-sans">
+          {/* Badge */}
+          <div
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 mb-4"
+            style={{
+              background: "rgba(254,44,85,0.08)",
+              border: "1px solid rgba(254,44,85,0.18)",
+            }}
+          >
+            <div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: "#FE2C55" }}
+            />
+            <span
+              className="text-xs font-dm-sans font-medium"
+              style={{ color: "#FE2C55" }}
+            >
               Nova análise
             </span>
           </div>
 
-          <h1 className="font-syne text-2xl sm:text-3xl md:text-4xl font-bold text-[#e8e8f8] mb-2 leading-tight">
+          <h1
+            className="font-syne text-2xl sm:text-3xl font-bold mb-2 leading-tight"
+            style={{ color: "#FFFFFF" }}
+          >
             Qual vídeo viralizou?
           </h1>
-          <p className="font-dm-sans text-sm sm:text-base text-[#3a3a55] max-w-xl lg:max-w-2xl">
+          <p
+            className="font-dm-sans text-sm sm:text-base max-w-xl"
+            style={{ color: "#5A5A5A" }}
+          >
             Sobe o vídeo que bombou e as métricas do TikTok. A IA vai descobrir
             por que funcionou e criar 5 roteiros novos para você.
           </p>
         </div>
 
+        {/* ── Form ────────────────────────────────────────────────── */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-6 sm:gap-8"
+          className="flex flex-col gap-4"
         >
-          {/* Seção 1 — Upload do vídeo */}
-          <div
-            className="rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 border border-white/6"
-            style={{
-              background:
-                "linear-gradient(145deg, #0f0f1a 0%, #0c0c16 60%, #0a0a14 100%)",
-            }}
+          {/* Seção 1 — Upload */}
+          <SectionCard
+            step="1"
+            title="Sobe o vídeo"
+            description="O mesmo vídeo que você postou no TikTok."
           >
-            <h2 className="font-syne text-base sm:text-lg font-semibold text-[#e8e8f8] mb-1">
-              1. Sobe o vídeo
-            </h2>
-            <p className="font-dm-sans text-xs sm:text-sm text-[#3a3a55] mb-4 sm:mb-5">
-              O mesmo vídeo que você postou no TikTok.
-            </p>
-
             <VideoUploader
               onUploadComplete={(data) => setVideoData(data)}
               onUploadError={() => setVideoData(null)}
             />
-          </div>
+
+            {/* Confirmação de upload */}
+            {videoData && (
+              <div
+                className="flex items-center gap-2 mt-4 px-3 py-2.5 rounded-xl"
+                style={{
+                  background: "rgba(52,211,153,0.06)",
+                  border: "1px solid rgba(52,211,153,0.15)",
+                }}
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  style={{ color: "rgb(52,211,153)", flexShrink: 0 }}
+                >
+                  <path
+                    d="M3 8l3.5 3.5L13 4.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span
+                  className="font-dm-sans text-xs truncate"
+                  style={{ color: "rgb(52,211,153)" }}
+                >
+                  {videoData.name}
+                </span>
+              </div>
+            )}
+          </SectionCard>
 
           {/* Seção 2 — Métricas */}
-          <div
-            className="rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 border border-white/6"
-            style={{
-              background:
-                "linear-gradient(145deg, #0f0f1a 0%, #0c0c16 60%, #0a0a14 100%)",
-            }}
+          <SectionCard
+            step="2"
+            title="Métricas do TikTok"
+            description="Abre o vídeo no TikTok, clica nos três pontos e vê as métricas."
           >
-            <h2 className="font-syne text-base sm:text-lg font-semibold text-[#e8e8f8] mb-1">
-              2. Métricas do TikTok
-            </h2>
-            <p className="font-dm-sans text-xs sm:text-sm text-[#3a3a55] mb-4 sm:mb-5">
-              Abre o vídeo no TikTok, clica nos três pontos e vê as métricas.
-            </p>
-
-            {/* Grid responsivo: 1 col em telas muito pequenas, 2 col em sm, 3 col em md, 4 col em lg, 5 col em xl (ideal para 5 itens) */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-              {/* Views */}
-              <div>
-                <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 truncate">
-                  👁 Visualizações
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  {...register("views", { valueAsNumber: true })}
-                  className="w-full bg-white/3 border border-white/7 rounded-lg sm:rounded-xl px-3 py-2.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+              {metrics.map(({ key, emoji, label }) => (
+                <MetricInput
+                  key={key}
+                  emoji={emoji}
+                  label={label}
+                  error={errors[key]?.message}
+                  inputProps={register(key, { valueAsNumber: true })}
                 />
-                {errors.views && (
-                  <p className="text-[10px] text-red-400 mt-1 font-dm-sans">
-                    {errors.views.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Likes */}
-              <div>
-                <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 truncate">
-                  ❤️ Curtidas
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  {...register("likes", { valueAsNumber: true })}
-                  className="w-full bg-white/3 border border-white/7 rounded-lg sm:rounded-xl px-3 py-2.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
-                />
-                {errors.likes && (
-                  <p className="text-[10px] text-red-400 mt-1 font-dm-sans">
-                    {errors.likes.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Comments */}
-              <div>
-                <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 truncate">
-                  💬 Comentários
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  {...register("comments", { valueAsNumber: true })}
-                  className="w-full bg-white/3 border border-white/7 rounded-lg sm:rounded-xl px-3 py-2.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
-                />
-                {errors.comments && (
-                  <p className="text-[10px] text-red-400 mt-1 font-dm-sans">
-                    {errors.comments.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Shares */}
-              <div>
-                <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 truncate">
-                  🔁 Compartilhamentos
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  {...register("shares", { valueAsNumber: true })}
-                  className="w-full bg-white/3 border border-white/7 rounded-lg sm:rounded-xl px-3 py-2.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
-                />
-                {errors.shares && (
-                  <p className="text-[10px] text-red-400 mt-1 font-dm-sans">
-                    {errors.shares.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Saves */}
-              <div>
-                <label className="block font-dm-sans text-xs text-[#5a5a78] font-medium mb-1.5 truncate">
-                  🔖 Salvamentos
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  {...register("saves", { valueAsNumber: true })}
-                  className="w-full bg-white/3 border border-white/7 rounded-lg sm:rounded-xl px-3 py-2.5 text-sm text-[#c8c8e8] font-dm-sans outline-none transition-colors placeholder:text-[#252535] focus:border-[rgba(124,92,252,0.4)]"
-                />
-                {errors.saves && (
-                  <p className="text-[10px] text-red-400 mt-1 font-dm-sans">
-                    {errors.saves.message}
-                  </p>
-                )}
-              </div>
+              ))}
             </div>
+          </SectionCard>
+
+          {/* ── Submit ──────────────────────────────────────────── */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={!videoData || isStartingAnalysis}
+              className="relative w-full rounded-xl py-4 text-sm font-bold font-dm-sans text-white transition-all"
+              style={{
+                background: videoData && !isStartingAnalysis
+                  ? "#FE2C55"
+                  : "rgba(254,44,85,0.3)",
+                cursor: !videoData || isStartingAnalysis ? "not-allowed" : "pointer",
+              }}
+              onMouseEnter={(e) => {
+                if (videoData && !isStartingAnalysis)
+                  e.currentTarget.style.background = "#D9203F";
+              }}
+              onMouseLeave={(e) => {
+                if (videoData && !isStartingAnalysis)
+                  e.currentTarget.style.background = "#FE2C55";
+              }}
+            >
+              {isStartingAnalysis ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeOpacity="0.25"
+                    />
+                    <path
+                      d="M12 2a10 10 0 0 1 10 10"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  Iniciando análise...
+                </span>
+              ) : (
+                "Analisar vídeo →"
+              )}
+            </button>
+
+            {!videoData && (
+              <p
+                className="text-center text-xs font-dm-sans mt-3"
+                style={{ color: "#5A5A5A" }}
+              >
+                Envie o vídeo para habilitar a análise
+              </p>
+            )}
           </div>
-
-          {/* Botão de submit */}
-          <button
-            type="submit"
-            disabled={!videoData || isStartingAnalysis}
-            className="relative w-full rounded-lg sm:rounded-xl py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white bg-linear-to-br from-[#7c5cfc] via-[#6040e0] to-[#5030d0] disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
-          >
-            {isStartingAnalysis ? "Iniciando análise..." : "Analisar vídeo →"}
-          </button>
-
-          {!videoData && (
-            <p className="text-center text-xs text-[#252535] font-dm-sans -mt-4">
-              Envie o vídeo para habilitar a análise
-            </p>
-          )}
         </form>
       </div>
     </div>

@@ -24,10 +24,10 @@ export default function HowItWorks() {
     <section id="como-funciona" className="px-6 py-24 sm:py-32 scroll-mt-20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <p className="font-dm-sans text-[clamp(9px,2.5vw,12px)] text-zinc-600 uppercase tracking-widest mb-4">
+          <p className="font-dm-sans text-[clamp(9px,2.5vw,12px)] text-[#5A5A5A] uppercase tracking-widest mb-4">
             Como funciona
           </p>
-          <h2 className="font-syne text-[clamp(18px,7vw,70px)] sm:text-[clamp(22px,5vw,70px)] lg:text-[clamp(22px,4vw,70px)] font-bold tracking-tight">
+          <h2 className="font-syne text-[clamp(18px,7vw,70px)] sm:text-[clamp(22px,5vw,70px)] lg:text-[clamp(22px,4vw,70px)] font-bold tracking-tight text-white">
             Três passos para o próximo viral
           </h2>
         </div>
@@ -36,25 +36,15 @@ export default function HowItWorks() {
           {steps.map((step) => (
             <div
               key={step.number}
-              className="relative rounded-2xl border border-white/10 p-6"
-              style={{
-                background: "linear-gradient(145deg, #0f0f1a 0%, #0a0a12 100%)",
-              }}
+              className="relative rounded-2xl bg-[#1C1B1B] p-6"
             >
-              <div
-                className="absolute top-0 left-0 right-0 h-px rounded-t-2xl"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(124,92,252,0.4), transparent)",
-                }}
-              />
-              <span className="font-syne text-4xl font-extrabold text-white/10 block mb-4">
+              <span className="font-syne text-4xl font-extrabold text-[#FE2C55]/20 block mb-4">
                 {step.number}
               </span>
               <h3 className="font-syne text-[clamp(16px,4vw,20px)] font-bold text-white mb-2">
                 {step.title}
               </h3>
-              <p className="font-dm-sans text-sm text-zinc-500 leading-relaxed">
+              <p className="font-dm-sans text-sm text-[#E6BCBD] leading-relaxed">
                 {step.description}
               </p>
             </div>
