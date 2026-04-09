@@ -7,7 +7,7 @@ import { Menu } from "lucide-react";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { SidebarComponent } from "./_components/Sidebar/Sidebar";
-import { Profile } from "./utils/types/dashboardTypes";
+import { Profile } from "./_utils/types/dashboardTypes";
 import { Loader2 } from "lucide-react";
 import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 

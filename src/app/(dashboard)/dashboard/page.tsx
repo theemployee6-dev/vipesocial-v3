@@ -16,9 +16,9 @@ import {
 import clsx from "clsx";
 import { getGreeting } from "@/shared/utils/time";
 import { toast } from "sonner";
-import { Analysis, Stats } from "./utils/types/dashboardTypes";
-import { STATUS_MAP } from "./utils/helpers/dashboard_StatusMap";
-import { formatDate } from "./utils/helpers/formatters/formatDate";
+import { Analysis, Stats } from "./_utils/types/dashboardTypes";
+import { STATUS_MAP } from "./_utils/helpers/dashboard_StatusMap";
+import { formatDate } from "./_utils/helpers/formatters/formatDate";
 
 // ─── Design Tokens — Cinematic Intelligence ───────────────────────────────────
 // bg:           #131313
@@ -114,7 +114,7 @@ function AnalysisRow({
         <div
           className={clsx(
             "w-7 h-7 rounded-lg flex items-center justify-center shrink-0",
-            isCompleted && "text-emerald-400",
+            isCompleted && "text-[#FE2C55]",
             isProcessing && "text-[#FE2C55]",
             awaitingNiche && "text-amber-400",
             analysis.status === "failed" && "text-[#E6BCBD]",
@@ -122,7 +122,7 @@ function AnalysisRow({
           )}
           style={{
             background: isCompleted
-              ? "rgba(52,211,153,0.08)"
+              ? "rgba(254,44,85,0.08)"
               : isProcessing || awaitingNiche
                 ? "rgba(254,44,85,0.08)"
                 : "rgba(255,255,255,0.04)",

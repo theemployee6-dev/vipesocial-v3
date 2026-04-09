@@ -9,18 +9,11 @@ import {
   User,
   LogOut,
 } from "lucide-react";
-import { Profile } from "../../utils/types/dashboardTypes";
+
 import NavItem from "../NavItem/NavItem";
 import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
-import { getInitials } from "../../utils/getInitials/getInitials";
-
-// ========== Tipos ==========
-
-interface SidebarProps {
-  mobile?: boolean;
-  profile: Profile | null;
-  onLogout: () => void;
-}
+import { getInitials } from "../../_utils/getInitials/getInitials";
+import { SidebarProps } from "./utils/types/SidebarTypes";
 
 // ========== Componente Principal ==========
 export function SidebarComponent({
@@ -65,12 +58,31 @@ export function SidebarComponent({
         <NavItem icon={<User size={16} />} label="Perfil" onClick={() => {}} />
       </nav>
 
-      {/* Perfil do usuário + logout */}
-      <div
-        className="mt-auto pt-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+      {/* Perfil do usuário + logout (tudo clicável) */}
+      <button
+        onClick={onLogout}
+        className="w-full text-left transition-all"
+        style={{
+          marginTop: "auto", // substitui mt-auto
+          paddingTop: "0.625rem", // pt-4
+          paddingBottom: "0.625rem", // pb-2 (para alinhar)
+          paddingLeft: "12px",
+          paddingRight: "12px",
+          borderRadius: "8px",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          cursor: "pointer",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "rgba(254,44,85,0.12)";
+          e.currentTarget.style.borderLeft = "2px solid #FE2C55";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.borderLeft = "2px solid transparent";
+        }}
       >
-        <div className="flex items-center gap-2.5 px-2 py-2">
+        <div className="flex items-center gap-2.5">
+          {/* Avatar (mesmo código original) */}
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 overflow-hidden"
             style={{
@@ -95,26 +107,19 @@ export function SidebarComponent({
               </span>
             )}
           </div>
-          <div className="flex-1 min-w-0">
-            <p
+
+          {/* Nome + ícone lado a lado */}
+          <div className="flex-1 flex items-center justify-between min-w-0">
+            <span
               className="font-dm-sans text-xs truncate"
               style={{ color: "#E6BCBD" }}
             >
               {profile?.full_name || "Usuário"}
-            </p>
+            </span>
+            <LogOut size={14} style={{ color: "#5A5A5A" }} />
           </div>
-          <button
-            onClick={onLogout}
-            className="transition-colors"
-            style={{ color: "#5A5A5A" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#E6BCBD")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#5A5A5A")}
-            title="Sair"
-          >
-            <LogOut size={14} />
-          </button>
         </div>
-      </div>
+      </button>
     </aside>
   );
 }
