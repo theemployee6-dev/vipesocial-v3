@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
         hostname: "utfs.io", // caso use Uploadthing para vídeos
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };
