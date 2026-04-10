@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { SidebarComponent } from "./_components/Sidebar/Sidebar";
-import { Profile } from "./_utils/types/dashboardTypes";
-import { Loader2 } from "lucide-react";
+import { SidebarComponent } from "./dashboard/_components/Sidebar/Sidebar";
+import { Profile } from "./dashboard/_utils/types/dashboardTypes";
 import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
+import Loading from "@/shared/components/Loading/Loading";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -47,18 +47,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   }, [supabase, router]);
 
   if (loading) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: "#131313" }}
-      >
-        <Loader2
-          size={28}
-          className="animate-spin"
-          style={{ color: "#FE2C55" }}
-        />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

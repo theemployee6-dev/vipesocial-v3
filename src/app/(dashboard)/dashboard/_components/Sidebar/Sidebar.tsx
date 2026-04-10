@@ -1,5 +1,3 @@
-// components/Sidebar.tsx
-import Image from "next/image";
 import clsx from "clsx";
 import {
   LayoutDashboard,
@@ -9,18 +7,33 @@ import {
   User,
   LogOut,
 } from "lucide-react";
-
-import NavItem from "../NavItem/NavItem";
-import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { getInitials } from "../../_utils/getInitials/getInitials";
+import NavItem from "../NavItem/NavItem";
 import { SidebarProps } from "./utils/types/SidebarTypes";
+import Image from "next/image";
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 
-// ========== Componente Principal ==========
 export function SidebarComponent({
   mobile = false,
   profile,
   onLogout,
 }: SidebarProps) {
+  const pathname = usePathname();
+
+  const navItems = [
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard size={16} />,
+    },
+    { href: "/analises", label: "Análises", icon: <BarChart2 size={16} /> },
+    { href: "/roteiros", label: "Roteiros", icon: <FileText size={16} /> },
+    { href: "/planos", label: "Planos", icon: <Star size={16} /> },
+    { href: "/perfil", label: "Perfil", icon: <User size={16} /> },
+  ];
+
   return (
     <aside
       className={clsx(
@@ -32,40 +45,30 @@ export function SidebarComponent({
         borderRight: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      {/* Logo */}
-      <div className="w-[66%] px-2 mb-8">
+      {/* logo */}
+      <div className="flex items-center justify-center mb-4">
         <LogoComponent />
       </div>
-
-      {/* Navegação */}
-      <nav className="flex flex-col gap-0.5 flex-1">
-        <NavItem
-          icon={<LayoutDashboard size={16} />}
-          label="Dashboard"
-          active
-        />
-        <NavItem
-          icon={<BarChart2 size={16} />}
-          label="Análises"
-          onClick={() => {}}
-        />
-        <NavItem
-          icon={<FileText size={16} />}
-          label="Roteiros"
-          onClick={() => {}}
-        />
-        <NavItem icon={<Star size={16} />} label="Planos" onClick={() => {}} />
-        <NavItem icon={<User size={16} />} label="Perfil" onClick={() => {}} />
+      {/* bottom line */}
+      <div className="w-full border-b border-gray-800 mb-3" />
+      <nav>
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link href={item.href} key={item.label}>
+              <NavItem icon={item.icon} label={item.label} active={isActive} />
+            </Link>
+          );
+        })}
       </nav>
-
-      {/* Perfil do usuário + logout (tudo clicável) */}
+      {/* Perfil do usuário + logout (inalterado) */}
       <button
         onClick={onLogout}
         className="w-full text-left transition-all"
         style={{
-          marginTop: "auto", // substitui mt-auto
-          paddingTop: "0.625rem", // pt-4
-          paddingBottom: "0.625rem", // pb-2 (para alinhar)
+          marginTop: "auto",
+          paddingTop: "0.625rem",
+          paddingBottom: "0.625rem",
           paddingLeft: "12px",
           paddingRight: "12px",
           borderRadius: "8px",
@@ -82,7 +85,6 @@ export function SidebarComponent({
         }}
       >
         <div className="flex items-center gap-2.5">
-          {/* Avatar (mesmo código original) */}
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 overflow-hidden"
             style={{
@@ -108,7 +110,6 @@ export function SidebarComponent({
             )}
           </div>
 
-          {/* Nome + ícone lado a lado */}
           <div className="flex-1 flex items-center justify-between min-w-0">
             <span
               className="font-dm-sans text-xs truncate"
