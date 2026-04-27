@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
-import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 import Loading from "@/shared/components/Loading/Loading";
 
 interface Script {
@@ -85,6 +84,8 @@ export default function RoteirosPage() {
   const [activeScript, setActiveScript] = useState(0);
   const [activeSection, setActiveSection] = useState<string>("roteiro");
 
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     async function fetchScripts() {
       const { data, error } = await supabase
@@ -99,6 +100,13 @@ export default function RoteirosPage() {
       }
 
       setScripts(data || []);
+      const scriptParam = searchParams.get("script");
+      if (scriptParam) {
+        const index = (data || []).findIndex(
+          (s) => s.script_number === Number(scriptParam),
+        );
+        if (index !== -1) setActiveScript(index);
+      }
       setLoading(false);
     }
 
@@ -142,38 +150,6 @@ export default function RoteirosPage() {
 
   return (
     <div className="min-h-screen bg-[#131313]">
-      {/* Header fixo - sem borda inferior, apenas separação por tom */}
-      <div className="sticky top-0 z-20 bg-[#131313] px-4 py-3 border-b border-white/5">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="flex items-center gap-1.5 text-xs text-[#E6BCBD] hover:text-white transition-colors font-dm-sans"
-          >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M10 3L5 8L10 13"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Dashboard
-          </button>
-
-          <div className="flex items-center w-full max-w-[120] sm:max-w-[130] md:max-w-[140]">
-            <LogoComponent priority />
-          </div>
-
-          <div className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 bg-[rgba(34,197,94,0.1)]">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
-            <span className="text-[10px] text-[#22c55e] font-dm-sans">
-              5 roteiros prontos
-            </span>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Título */}
         <div className="mb-6">

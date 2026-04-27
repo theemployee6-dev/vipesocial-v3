@@ -4,36 +4,21 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { toast } from "sonner";
 import { createClientSupabaseClient } from "@/infrastructure/supabase/client";
 import { VideoUploader } from "@/shared/components/VideoUploader/VideoUploader";
+import Loading from "@/shared/components/Loading/Loading";
+import { Check, ChevronLeft } from "lucide-react";
+import {
+  MetricasFormData,
+  metricasSchema,
+} from "./_validation/validationSchema";
 
 // ─── Design Tokens — Cinematic Intelligence ───────────────────────────────────
 // bg: #131313 | card-1: #1C1B1B | card-2: #201F1F
 // accent: #FE2C55 | text-secondary: #E6BCBD | text-muted: #5A5A5A
 // border: rgba(255,255,255,0.06) | input-bg: rgba(255,255,255,0.04)
 // ─────────────────────────────────────────────────────────────────────────────
-
-const metricasSchema = z.object({
-  views: z
-    .number({ error: "Digite o número de views" })
-    .min(0, "Views não pode ser negativo"),
-  likes: z
-    .number({ error: "Digite o número de likes" })
-    .min(0, "Likes não pode ser negativo"),
-  comments: z
-    .number({ error: "Digite o número de comentários" })
-    .min(0, "Comentários não pode ser negativo"),
-  shares: z
-    .number({ error: "Digite o número de compartilhamentos" })
-    .min(0, "Compartilhamentos não pode ser negativo"),
-  saves: z
-    .number({ error: "Digite o número de salvamentos" })
-    .min(0, "Salvamentos não pode ser negativo"),
-});
-
-type MetricasFormData = z.infer<typeof metricasSchema>;
 
 // ─── MetricInput ──────────────────────────────────────────────────────────────
 
@@ -106,10 +91,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="rounded-2xl p-6 sm:p-8"
-      style={{ background: "#1C1B1B" }}
-    >
+    <div className="rounded-2xl p-6 sm:p-8" style={{ background: "#1C1B1B" }}>
       {/* Step badge */}
       <div className="flex items-center gap-2.5 mb-4">
         <div
@@ -275,7 +257,6 @@ export default function NovaAnalisePage() {
       style={{ background: "#131313" }}
     >
       <div className="max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
-
         {/* ── Header ──────────────────────────────────────────────── */}
         <div className="mb-8 sm:mb-10">
           {/* Back */}
@@ -286,15 +267,7 @@ export default function NovaAnalisePage() {
             onMouseEnter={(e) => (e.currentTarget.style.color = "#E6BCBD")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "#5A5A5A")}
           >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M10 3L5 8L10 13"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ChevronLeft size={14} strokeWidth={1.5} color="currentColor" />
             Voltar
           </button>
 
@@ -334,10 +307,7 @@ export default function NovaAnalisePage() {
         </div>
 
         {/* ── Form ────────────────────────────────────────────────── */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           {/* Seção 1 — Upload */}
           <SectionCard
             step="1"
@@ -358,21 +328,11 @@ export default function NovaAnalisePage() {
                   border: "1px solid rgba(52,211,153,0.15)",
                 }}
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  style={{ color: "rgb(52,211,153)", flexShrink: 0 }}
-                >
-                  <path
-                    d="M3 8l3.5 3.5L13 4.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <Check
+                  size={14}
+                  color="rgb(52,211,153)"
+                  style={{ flexShrink: 0 }}
+                />
                 <span
                   className="font-dm-sans text-xs truncate"
                   style={{ color: "rgb(52,211,153)" }}
@@ -409,10 +369,12 @@ export default function NovaAnalisePage() {
               disabled={!videoData || isStartingAnalysis}
               className="relative w-full rounded-xl py-4 text-sm font-bold font-dm-sans text-white transition-all"
               style={{
-                background: videoData && !isStartingAnalysis
-                  ? "#FE2C55"
-                  : "rgba(254,44,85,0.3)",
-                cursor: !videoData || isStartingAnalysis ? "not-allowed" : "pointer",
+                background:
+                  videoData && !isStartingAnalysis
+                    ? "#FE2C55"
+                    : "rgba(254,44,85,0.3)",
+                cursor:
+                  !videoData || isStartingAnalysis ? "not-allowed" : "pointer",
               }}
               onMouseEnter={(e) => {
                 if (videoData && !isStartingAnalysis)
@@ -425,32 +387,11 @@ export default function NovaAnalisePage() {
             >
               {isStartingAnalysis ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeOpacity="0.25"
-                    />
-                    <path
-                      d="M12 2a10 10 0 0 1 10 10"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <Loading />
                   Iniciando análise...
                 </span>
               ) : (
-                "Analisar vídeo →"
+                "Analisar vídeo"
               )}
             </button>
 

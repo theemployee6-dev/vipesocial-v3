@@ -1,19 +1,16 @@
+// Externos (bibliotecas e frameworks)
 import clsx from "clsx";
-import {
-  LayoutDashboard,
-  BarChart2,
-  FileText,
-  Star,
-  User,
-  LogOut,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+// Internos (aliases e relativos)
+import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
 import { getInitials } from "../../_utils/getInitials/getInitials";
 import NavItem from "../NavItem/NavItem";
-import { SidebarProps } from "./utils/types/SidebarTypes";
-import Image from "next/image";
-import LogoComponent from "@/shared/components/LogoComponent/LogoComponent";
+import { navItems } from "./_constants/navItems";
+import { SidebarProps } from "./_utils/types/SidebarTypes";
 
 export function SidebarComponent({
   mobile = false,
@@ -21,18 +18,6 @@ export function SidebarComponent({
   onLogout,
 }: SidebarProps) {
   const pathname = usePathname();
-
-  const navItems = [
-    {
-      href: "/dashboard",
-      label: "Dashboard",
-      icon: <LayoutDashboard size={16} />,
-    },
-    { href: "/analises", label: "Análises", icon: <BarChart2 size={16} /> },
-    { href: "/roteiros", label: "Roteiros", icon: <FileText size={16} /> },
-    { href: "/planos", label: "Planos", icon: <Star size={16} /> },
-    { href: "/perfil", label: "Perfil", icon: <User size={16} /> },
-  ];
 
   return (
     <aside
@@ -49,6 +34,7 @@ export function SidebarComponent({
       <div className="flex items-center justify-center mb-4">
         <LogoComponent />
       </div>
+
       {/* bottom line */}
       <div className="w-full border-b border-gray-800 mb-3" />
       <nav>
@@ -61,6 +47,7 @@ export function SidebarComponent({
           );
         })}
       </nav>
+
       {/* Perfil do usuário + logout (inalterado) */}
       <button
         onClick={onLogout}
